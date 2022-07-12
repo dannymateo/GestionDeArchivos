@@ -1,0 +1,72 @@
+﻿@model GestionDeArchivos.Data.Entities.Document
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+    <flash dismissable="true" />
+
+
+    <div class="row">
+        <div class="col-md-4  offset-md-4">
+            <div class="card bg-light mb-3" style="width: 450px; height: auto">
+                <h5 class="card-header text-center"><i class="fa-solid fa-envelope text-navy"></i> Ingresar Documento</h5>
+                <div class="card-body ">
+                    <form asp-action="Create" class="form1">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                        <div>
+                            <label asp-for="name" class="control-label"></label>
+                            <input asp-for="name" class="form-control" />
+                            <span asp-validation-for="name" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="Date" class="control-label"></label>
+                            <input asp-for="Date" class="form-control" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="comentarios" class="control-label"></label>
+                            <input asp-for="comentarios" class="form-control" />
+                            <span asp-validation-for="comentarios" class="text-danger"></span>
+                        </div>
+                        <div>
+                            <label asp-for="DocumentStatus" class="control-label"></label>
+                            <select class="browser-default" name="DocumentStatus">
+                                <option value="Aprobar">Aprobar</option>
+                            </select>
+                        </div>
+                                            @{
+                        List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
+                    }
+                    <div>
+                        <label asp-for="remarks" class="control-label"></label>
+                        <select asp-for="remarks" asp-items="@items" class="browser-default">
+                        </select>
+                        <span asp-validation-for="remarks" class="text-danger"></span>
+                    </div>
+                        <div class="form-group">
+
+                        </div>
+
+                        <div class="form-group1 ">
+                            <input type="submit" class="waves-effect waves-light btn-large" value="Guardar Documento" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
+</body>
+</html>

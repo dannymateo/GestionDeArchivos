@@ -1,0 +1,147 @@
+﻿@model IEnumerable<GestionDeArchivos.Data.Entities.Document>
+@{
+    ViewData["Title"] = "Lista de Documentos";
+}
+<flash dismissable="true" />
+<div class="card p-3">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table class="table table-hover" id="example1">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Acciones
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Date)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.remarks)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.DocumentStatus)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.User)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.UserRecibes)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.comentarios)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="btn-group" role="group" aria-label="Basic example">
+                                          <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                          <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Date)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.remarks)
+                                    </td>
+                                    <td>
+                                        @if (@item.DocumentStatus == "Revisar")
+                                        {
+
+                                            <button class="btn btn-warning col-12">@Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-exclamation"></i></button>
+
+
+                                        }
+                                        @if (@item.DocumentStatus == "Aprobado")
+                                        {
+
+
+                                            <button class="btn btn-success col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-check-double"></i></button>
+
+                                        }
+                                        @if (@item.DocumentStatus == "Aprobar")
+                                        {
+
+                                            <button class="btn btn-danger col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-question"></i></button>
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => item.User)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(model => item.UserRecibes)
+                                    </td>
+                                    <td>
+                                       @if (item.comentarios == null)
+                                        {
+                                            <p>Sin comentarios</p> 
+                                        }else{
+                                         @Html.DisplayFor(modelItem => item.comentarios)
+
+                                        }
+                                    </td>
+
+                                </tr>
+
+
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": [ {
+            extend: 'excel',
+            text: '<i class="fa fa-file-excel"></i>',
+            className: 'btn btn-success',
+            titleAttr: 'Exportar a excel'
+        }, {
+            extend: 'print',
+            text: '<i class="fa fa-print"></i>',
+            className: 'btn btn-info',
+            titleAttr: 'Imprimir'
+
+        },{
+            extend: 'pdf',
+            text: '<i class="fa fa-file-pdf"></i>',
+            className: 'btn btn-danger',
+            titleAttr: 'Exportar a pdf'
+        }]
+
+        
+
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+</script>
+}
