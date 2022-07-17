@@ -29,9 +29,9 @@ namespace GestionDeArchivos.Data
         {
             if (!_context.Documents.Any())
             {
-                _context.Documents.Add(new Document { name = "Documento 1", remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado" });
-                _context.Documents.Add(new Document { name = "Documento 2", remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado" });
-                _context.Documents.Add(new Document { name = "Documento 3", remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado" });
+                _context.Documents.Add(new Document { name = "Documento 1", UsuarioId = 1, AreaId = 1, remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
+                _context.Documents.Add(new Document { name = "Documento 2", UsuarioId = 1, AreaId = 1, remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
+                _context.Documents.Add(new Document { name = "Documento 3", UsuarioId = 2, AreaId = 1, remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "User@gmail.com" });
             }
             await _context.SaveChangesAsync();
         }

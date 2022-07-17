@@ -28,9 +28,9 @@ namespace GestionDeArchivos.Controllers
         // GET: Areas
         public async Task<IActionResult> Index()
         {
-              return _context.Areas != null ? 
-                          View(await _context.Areas.ToListAsync()) :
-                          Problem("Entity set 'DataContext.Areas'  is null.");
+            return _context.Areas != null ?
+                        View(await _context.Areas.Include(x => x.Documents).ToListAsync()) :
+                        Problem("Entity set 'DataContext.Usuarios'  is null.");
         }
 
         // GET: Areas/Create

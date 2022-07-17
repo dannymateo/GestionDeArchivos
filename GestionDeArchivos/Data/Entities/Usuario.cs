@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GestionDeArchivos.Data.Entities
 {
@@ -27,5 +28,10 @@ namespace GestionDeArchivos.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
 
         public string Roles { get; set; }
+
+        public List<Document>? Documents { get; set; }
+        [NotMapped]
+        public int DocumentsNumberUser => Documents == null ? 0 : Documents.Count;
+
     }
 }

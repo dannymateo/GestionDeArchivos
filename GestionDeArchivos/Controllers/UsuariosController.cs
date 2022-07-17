@@ -28,7 +28,7 @@ namespace GestionDeArchivos.Controllers
         public async Task<IActionResult> Index()
         {
             return _context.Usuarios != null ?
-                        View(await _context.Usuarios.ToListAsync()) :
+                        View(await _context.Usuarios.Include(x => x.Documents).ToListAsync()) :
                         Problem("Entity set 'DataContext.Usuarios'  is null.");
         }
 

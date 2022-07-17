@@ -1,5 +1,6 @@
 ﻿using GestionDeArchivos.Data;
 using GestionDeArchivos.Data.Entities;
+using GestionDeArchivos.Helpers;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,7 @@ namespace GestionDeArchivos.Controllers
     {
         private readonly DataContext _context;
         private readonly IFlashMessage _flashMessage;
+        private readonly UserHelper _helper;
 
         public ActionResult Index()
         {
@@ -21,7 +23,7 @@ namespace GestionDeArchivos.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(Usuario _usuario)
         {
-            var usuario = ValidarUsuario(_usuario.Correo, _usuario.Clave);
+            var usuario = _helper.ValidarUsuario(_usuario.Correo, _usuario.Clave);
 
             if (usuario != null)
             {
@@ -30,8 +32,8 @@ namespace GestionDeArchivos.Controllers
                 #region AUTENTICACTION
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, usuario.Nombre),
-                    new Claim("Correo", usuario.Correo),
+                    new Claim(ClaimTypes.Name, usuario.Correo),
+                    new Claim("Correo", usuario.Correo)
                 };
                 claims.Add(new Claim(ClaimTypes.Role, usuario.Roles));
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -64,31 +66,11 @@ namespace GestionDeArchivos.Controllers
         }
         //______________________________________________________________
 
-        public AccesoController(DataContext context, IFlashMessage flashMessage)
+        public AccesoController(DataContext context, IFlashMessage flashMessage, UserHelper helper)
         {
             _context = context;
             _flashMessage = flashMessage;
-
-        }
-        public List<Usuario> ListaUsuario()
-        {
-            List<Usuario> list = _context.Usuarios.Select(u => new Usuario
-            {
-                Correo = u.Correo,
-                Clave = u.Clave,
-                Nombre = u.Nombre,
-                Roles = u.Roles
-            }).ToList();
-            return list;
-
-        }
-
-        public Usuario ValidarUsuario(string _correo, string _clave)
-        {
-            ListaUsuario().Where(item => item.Correo == _correo && item.Clave == _clave).FirstOrDefault();
-            Usuario usuario = ListaUsuario().Where(item => item.Correo == _correo && item.Clave == _clave).FirstOrDefault();
-
-            return usuario;
+            _helper = helper;
 
         }
     }

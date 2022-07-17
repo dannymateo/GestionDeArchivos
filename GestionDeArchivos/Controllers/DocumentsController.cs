@@ -27,7 +27,7 @@ namespace GestionDeArchivos.Controllers
 
         [Authorize(Roles = "Administrador,Usuario")]
 
-        public IActionResult Create()
+        public async Task<IActionResult> CreateAsync()
         {
             ViewBag.items = GetAreasAsync().Result;
             Document document = new()
@@ -45,9 +45,11 @@ namespace GestionDeArchivos.Controllers
             if (ModelState.IsValid)
                 try
                 {
-                    var GetCorreo = (User.Identity.Name);
-                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Nombre == GetCorreo);
-                    document.User = user.Nombre;
+                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
+                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.name == document.remarks);
+                    document.User = user.Correo;
+                    document.AreaId = area.id;
+                    document.UsuarioId = user.Id;
                     _context.Add(document);
                     await _context.SaveChangesAsync();
                     _flashMessage.Confirmation("Guardado exitoso.");
@@ -68,6 +70,7 @@ namespace GestionDeArchivos.Controllers
                 {
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
+            ViewBag.items = GetAreasAsync().Result;
             return View(document);
         }
         [Authorize(Roles = "Administrador")]
@@ -103,9 +106,10 @@ namespace GestionDeArchivos.Controllers
             {
                 try
                 {
-                    var GetCorreo = (User.Identity.Name);
-                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Nombre == GetCorreo);
-                    document.UserRecibes = user.Nombre;
+                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
+                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.name == document.remarks);
+                    document.UserRecibes = user.Correo;
+                    document.AreaId = area.id;
                     _context.Update(document);
                     await _context.SaveChangesAsync();
                     _flashMessage.Warning("Documento editado");
@@ -127,6 +131,7 @@ namespace GestionDeArchivos.Controllers
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
             }
+            ViewBag.items = GetAreasAsync().Result;
             return View(document);
         }
         [Authorize(Roles = "Administrador")]

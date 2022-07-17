@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using GestionDeArchivos.Data;
 using Microsoft.EntityFrameworkCore;
 using Vereyon.Web;
+using GestionDeArchivos.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         option.AccessDeniedPath = "/Acceso/NotAuthorized";
     });
 builder.Services.AddTransient<SeedDb>();
+builder.Services.AddScoped<UserHelper>();
 
 var app = builder.Build();
 SeedData();

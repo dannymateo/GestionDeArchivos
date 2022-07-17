@@ -16,6 +16,8 @@ namespace GestionDeArchivos.Data.Entities
         [Display(Name = "Area")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string remarks { get; set; }
+        public int? AreaId { get; set; }
+        public int? UsuarioId { get; set; }
         [Display(Name = "Comentarios")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string? comentarios { get; set; }

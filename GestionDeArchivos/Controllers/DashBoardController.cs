@@ -1,6 +1,6 @@
 ﻿using GestionDeArchivos.Data;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestionDeArchivos.Controllers
 {
@@ -14,7 +14,7 @@ namespace GestionDeArchivos.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.UsersCount = _context.Usuarios.Count();
             ViewBag.DocumentsAprobados = _context.Documents.Where(d => d.DocumentStatus == "Aprobado").Count();
@@ -23,7 +23,7 @@ namespace GestionDeArchivos.Controllers
             ViewBag.DocumentsRevisadosPorMi = _context.Documents.Where(d => d.DocumentStatus == "Revisar" && d.UserRecibes == (User.Identity.Name)).Count();
             ViewBag.DocumentsAprobar = _context.Documents.Where(d => d.DocumentStatus == "Aprobar").Count();
 
-            return View();
+            return View(await _context.Documents.Where(d => d.DocumentStatus == "Aprobar").ToListAsync());
         }
     }
 }
