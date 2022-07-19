@@ -9,6 +9,8 @@ using GestionDeArchivos.Data;
 using GestionDeArchivos.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Vereyon.Web;
+using static GestionDeArchivos.Helpers.ModalHelper;
+using GestionDeArchivos.Helpers;
 
 namespace GestionDeArchivos.Controllers
 {
@@ -32,160 +34,88 @@ namespace GestionDeArchivos.Controllers
                         Problem("Entity set 'DataContext.Usuarios'  is null.");
         }
 
-        // GET: Usuarios/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+        [NoDirectAccess]
+        public async Task<IActionResult> AddOrEdit(int id = 0)
         {
-            if (id == null || _context.Usuarios == null)
+            if (id == 0)
             {
-                return NotFound();
+                return View(new Usuario());
             }
-
-            var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
+            else
             {
-                return NotFound();
+                Usuario usuario = await _context.Usuarios.FindAsync(id);
+                if (usuario == null)
+                {
+                    return NotFound();
+                }
+                return View(usuario);
             }
-
-            return View(usuario);
         }
-
-        // GET: Usuarios/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Usuarios/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nombre,Correo,Clave,Roles")] Usuario usuario)
+        public async Task<IActionResult> AddOrEdit(int id, Usuario usuario)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Add(usuario);
-                    await _context.SaveChangesAsync();
-                    _flashMessage.Confirmation("Guardado exitoso.");
-                    return RedirectToAction(nameof(Index));
+                    if (id == 0) //Insert
+                    {
+                        _context.Add(usuario);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro creado.");
+                    }
+                    else //Update
+                    {
+                        _context.Update(usuario);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro actualizado.");
+                    }
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        _flashMessage.Danger("Ya existe un Usuario con este mismo correo.");
-
+                        _flashMessage.Danger("Ya existe un usuario con el mismo nombre.");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
+                    return View(usuario);
                 }
                 catch (Exception exception)
                 {
-                    ModelState.AddModelError(string.Empty, exception.Message);
+                    _flashMessage.Danger(exception.Message);
+                    return View(usuario);
                 }
-            }
-            return View(usuario);
-        }
-
-        // GET: Usuarios/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Usuarios == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-            return View(usuario);
-        }
-
-        // POST: Usuarios/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Correo,Clave,Roles")] Usuario usuario)
-        {
-            if (id != usuario.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                return Json(new
                 {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
-                    _flashMessage.Warning("Usuario editado");
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException dbUpdateException)
-                {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    {
-                        _flashMessage.Danger("Ya existe un Usuario con este mismo correo.");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    ModelState.AddModelError(string.Empty, exception.Message);
-                }
+                    isValid = true,
+                    html = ModalHelper.RenderRazorViewToString(this, "_ViewAll",
+                _context.Usuarios.ToList())
+                });
             }
-            return View(usuario);
-
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", usuario) });
         }
-
         // GET: Usuarios/Delete/5
+        [NoDirectAccess]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Usuarios == null)
-            {
-                return NotFound();
-            }
-
-            var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (usuario == null)
-            {
-                return NotFound();
-            }
-
-            return View(usuario);
-        }
-
-        // POST: Usuarios/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Usuarios == null)
-            {
-                return Problem("Entity set 'DataContext.Usuarios'  is null.");
-            }
-            var usuario = await _context.Usuarios.FindAsync(id);
-            if (usuario != null)
+            Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(a => a.Id == id);
+            try
             {
                 _context.Usuarios.Remove(usuario);
+                await _context.SaveChangesAsync();
+                _flashMessage.Info("Registro borrado.");
             }
-
-            await _context.SaveChangesAsync();
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar el usuario porque tiene registros relacionados.");
+            }
             return RedirectToAction(nameof(Index));
         }
-
         private bool UsuarioExists(int id)
         {
             return (_context.Usuarios?.Any(e => e.Id == id)).GetValueOrDefault();

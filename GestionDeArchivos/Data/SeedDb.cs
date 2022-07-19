@@ -19,9 +19,9 @@ namespace GestionDeArchivos.Data
         {
             if (!_context.Areas.Any())
             {
-                _context.Areas.Add(new Areas { name = "Funeraria" });
-                _context.Areas.Add(new Areas { name = "Contabilidad" });
-                _context.Areas.Add(new Areas { name = "Gerencia" });
+                _context.Areas.Add(new Areas { Name = "Funeraria" });
+                _context.Areas.Add(new Areas { Name = "Contabilidad" });
+                _context.Areas.Add(new Areas { Name = "Gerencia" });
             }
             await _context.SaveChangesAsync();
         }
@@ -29,9 +29,9 @@ namespace GestionDeArchivos.Data
         {
             if (!_context.Documents.Any())
             {
-                _context.Documents.Add(new Document { name = "Documento 1", UsuarioId = 1, AreaId = 1, remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
-                _context.Documents.Add(new Document { name = "Documento 2", UsuarioId = 1, AreaId = 1, remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
-                _context.Documents.Add(new Document { name = "Documento 3", UsuarioId = 2, AreaId = 1, remarks = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "User@gmail.com" });
+                _context.Documents.Add(new Document { Name = "Documento 1", UsuarioId = 1, AreaId = 1, Location = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
+                _context.Documents.Add(new Document { Name = "Documento 2", UsuarioId = 1, AreaId = 1, Location = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
+                _context.Documents.Add(new Document { Name = "Documento 3", UsuarioId = 2, AreaId = 1, Location = "Base de Datos", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "User@gmail.com" });
             }
             await _context.SaveChangesAsync();
         }

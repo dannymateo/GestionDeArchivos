@@ -9,6 +9,8 @@ using GestionDeArchivos.Data;
 using GestionDeArchivos.Data.Entities;
 using Vereyon.Web;
 using Microsoft.AspNetCore.Authorization;
+using static GestionDeArchivos.Helpers.ModalHelper;
+using GestionDeArchivos.Helpers;
 
 namespace GestionDeArchivos.Controllers
 {
@@ -33,141 +35,91 @@ namespace GestionDeArchivos.Controllers
                         Problem("Entity set 'DataContext.Usuarios'  is null.");
         }
 
-        // GET: Areas/Create
-        public IActionResult Create()
+        [NoDirectAccess]
+        public async Task<IActionResult> AddOrEdit(int id = 0)
         {
-            return View();
+            if (id == 0)
+            {
+                return View(new Areas());
+            }
+            else
+            {
+                Areas areas = await _context.Areas.FindAsync(id);
+                if (areas == null)
+                {
+                    return NotFound();
+                }
+                return View(areas);
+            }
         }
-
-        // POST: Areas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,name")] Areas areas)
+        public async Task<IActionResult> AddOrEdit(int id, Areas areas)
         {
             if (ModelState.IsValid)
+            {
                 try
                 {
-                    _context.Add(areas);
-                    await _context.SaveChangesAsync();
-                    _flashMessage.Confirmation("Guardado exitoso.");
-                    return RedirectToAction(nameof(Index));
+                    if (id == 0) //Insert
+                    {
+                        _context.Add(areas);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro creado.");
+                    }
+                    else //Update
+                    {
+                        _context.Update(areas);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro actualizado.");
+                    }
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        _flashMessage.Danger("Ya existe una Área con este mismo nombre.");
+                        _flashMessage.Danger("Ya existe una categoría con el mismo nombre.");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
+                    return View(areas);
                 }
                 catch (Exception exception)
                 {
-                    ModelState.AddModelError(string.Empty, exception.Message);
+                    _flashMessage.Danger(exception.Message);
+                    return View(areas);
                 }
-            return View(areas);
-        }
-
-        // GET: Areas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Areas == null)
-            {
-                return NotFound();
-            }
-
-            var areas = await _context.Areas.FindAsync(id);
-            if (areas == null)
-            {
-                return NotFound();
-            }
-            return View(areas);
-        }
-
-        // POST: Areas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,name")] Areas areas)
-        {
-            if (id != areas.id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                return Json(new
                 {
-                    _context.Update(areas);
-                    await _context.SaveChangesAsync();
-                    _flashMessage.Warning("Área editada");
-                    return RedirectToAction(nameof(Index));
-                }
-                catch (DbUpdateException dbUpdateException)
-                {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    {
-                        _flashMessage.Danger("Ya existe una Área con este mismo nombre.");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
-                    }
-                }
-                catch (Exception exception)
-                {
-                    ModelState.AddModelError(string.Empty, exception.Message);
-                }
+                    isValid = true,
+                    html = ModalHelper.RenderRazorViewToString(this, "_ViewAll",
+                _context.Areas.ToList())
+                });
             }
-            return View(areas);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", areas) });
         }
 
         // GET: Areas/Delete/5
+        [NoDirectAccess]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Areas == null)
-            {
-                return NotFound();
-            }
-
-            var areas = await _context.Areas
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (areas == null)
-            {
-                return NotFound();
-            }
-
-            return View(areas);
-        }
-
-        // POST: Areas/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Areas == null)
-            {
-                return Problem("Entity set 'DataContext.Areas'  is null.");
-            }
-            var areas = await _context.Areas.FindAsync(id);
-            if (areas != null)
+            Areas areas = await _context.Areas.FirstOrDefaultAsync(a => a.Id == id);
+            try
             {
                 _context.Areas.Remove(areas);
+                await _context.SaveChangesAsync();
+                _flashMessage.Info("Registro borrado.");
             }
-            
-            await _context.SaveChangesAsync();
-            _flashMessage.Danger("Área eliminada");
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar el area porque tiene registros relacionados.");
+            }
             return RedirectToAction(nameof(Index));
         }
         private bool AreasExists(int id)
         {
-          return (_context.Areas?.Any(e => e.id == id)).GetValueOrDefault();
+            return (_context.Areas?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

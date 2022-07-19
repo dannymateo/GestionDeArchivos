@@ -29,8 +29,7 @@ namespace GestionDeArchivos.Data.Entities
 
         public string Roles { get; set; }
 
-        public List<Document>? Documents { get; set; }
-        [NotMapped]
+        public ICollection<Document>? Documents { get; set; }
         public int DocumentsNumberUser => Documents == null ? 0 : Documents.Count;
 
     }

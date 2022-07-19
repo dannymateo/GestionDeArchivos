@@ -6,27 +6,26 @@ namespace GestionDeArchivos.Data.Entities
 {
     public class Document
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Nombre Documento")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [Display(Name = "Area")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        public string remarks { get; set; }
+        public string Location { get; set; }
         public int? AreaId { get; set; }
         public int? UsuarioId { get; set; }
         [Display(Name = "Comentarios")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        public string? comentarios { get; set; }
+        public string? Remark { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         [Display(Name = "Fecha")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public DateTime Date { get; set; }
-        //public byte[] Archivo { get; set; }
 
         [Display(Name = "Estado")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]

@@ -18,24 +18,24 @@
                                     <input type="hidden" asp-for="User" />
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                         <div>
-                            <label asp-for="name" class="control-label"></label>
-                            <input asp-for="name" class="form-control" />
-                            <span asp-validation-for="name" class="text-danger"></span>
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                                             @{
                         List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
                     }
                     <div>
-                        <label asp-for="remarks" class="control-label"></label>
-                        <select asp-for="remarks" asp-items="@items" class="browser-default">
+                        <label asp-for="Location" class="control-label"></label>
+                        <select asp-for="Location" asp-items="@items" class="browser-default">
                         </select>
-                        <span asp-validation-for="remarks" class="text-danger"></span>
+                        <span asp-validation-for="Location" class="text-danger"></span>
                     </div>
                     <div>
-                        <label asp-for="comentarios" class="control-label"></label>
-                        <select asp-for="comentarios" asp-items="@items" class="browser-default">
+                        <label asp-for="Remark" class="control-label"></label>
+                        <select asp-for="Remark" asp-items="@items" class="browser-default">
                         </select>
-                        <span asp-validation-for="comentarios" class="text-danger"></span>
+                        <span asp-validation-for="Remark" class="text-danger"></span>
                     </div>
                         <div>
                             <label asp-for="Date" class="control-label"></label>
@@ -54,7 +54,7 @@
                         </div>
                     </form>
                              <form asp-action="Delete" class="form1">
-            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="Id" />
             <input type="submit" value="           Eliminar           " class="btn btn-danger btn-large" />
             <br />
             <a asp-action="Index">volver a la lista</a>

@@ -1,10 +1,12 @@
 ﻿using GestionDeArchivos.Data;
 using GestionDeArchivos.Data.Entities;
+using GestionDeArchivos.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Vereyon.Web;
+using static GestionDeArchivos.Helpers.ModalHelper;
 
 namespace GestionDeArchivos.Controllers
 {
@@ -12,10 +14,13 @@ namespace GestionDeArchivos.Controllers
     {
         private readonly DataContext _context;
         private readonly IFlashMessage _flashMessage;
-        public DocumentsController(DataContext context, IFlashMessage flashMessage)
+        private readonly GetAreasHelper _getAreasHelper;
+
+        public DocumentsController(DataContext context, IFlashMessage flashMessage, GetAreasHelper getAreasHelper)
         {
             _context = context;
             _flashMessage = flashMessage;
+            _getAreasHelper = getAreasHelper;
         }
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
@@ -29,7 +34,7 @@ namespace GestionDeArchivos.Controllers
 
         public async Task<IActionResult> CreateAsync()
         {
-            ViewBag.items = GetAreasAsync().Result;
+            ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
             Document document = new()
             {
                 Date = DateTime.Now,
@@ -46,9 +51,9 @@ namespace GestionDeArchivos.Controllers
                 try
                 {
                     Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
-                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.name == document.remarks);
+                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
                     document.User = user.Correo;
-                    document.AreaId = area.id;
+                    document.AreaId = area.Id;
                     document.UsuarioId = user.Id;
                     _context.Add(document);
                     await _context.SaveChangesAsync();
@@ -70,131 +75,113 @@ namespace GestionDeArchivos.Controllers
                 {
                     ModelState.AddModelError(string.Empty, exception.Message);
                 }
-            ViewBag.items = GetAreasAsync().Result;
+            ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
             return View(document);
         }
-        [Authorize(Roles = "Administrador")]
-
-        // GET: Documents/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [NoDirectAccess]
+        public async Task<IActionResult> AddOrEdit(int id = 0)
         {
-            ViewBag.items = GetAreasAsync().Result;
-            if (id == null || _context.Documents == null)
+            if (id == 0)
             {
-                return NotFound();
+                ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+                Document document = new()
+                {
+                    Date = DateTime.Now,
+                    DocumentStatus = "Aprobar"
+                };
+                return View(document);
             }
-
-            var document = await _context.Documents.FindAsync(id);
-            if (document == null)
+            else
             {
-                return NotFound();
+                Document document = await _context.Documents.FindAsync(id);
+                if (document == null)
+                {
+                    return NotFound();
+                }
+                ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+                return View(document);
             }
-            return View(document);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-
-        public async Task<IActionResult> Edit(int id, Document document)
+        public async Task<IActionResult> AddOrEdit(int id, Document document)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
-                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.name == document.remarks);
-                    document.UserRecibes = user.Correo;
-                    document.AreaId = area.id;
-                    _context.Update(document);
-                    await _context.SaveChangesAsync();
-                    _flashMessage.Warning("Documento editado");
-                    return RedirectToAction(nameof(Index));
+                    if (id == 0) //Insert
+                    {
+                        Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
+                        Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
+                        document.User = user.Correo;
+                        document.AreaId = area.Id;
+                        document.UsuarioId = user.Id;
+                        _context.Add(document);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro creado.");
+                    }
+                    else //Update
+                    {
+                        Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
+                        Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
+                        document.UserRecibes = user.Correo;
+                        document.AreaId = area.Id;
+                        _context.Update(document);
+                        await _context.SaveChangesAsync();
+                        _flashMessage.Info("Registro actualizado.");
+                    }
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        _flashMessage.Danger("Ya existe un Documento con este mismo nombre.");
+                        _flashMessage.Danger("Ya existe un documento con el mismo nombre.");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
+                    ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+                    return View(document);
                 }
                 catch (Exception exception)
                 {
-                    ModelState.AddModelError(string.Empty, exception.Message);
+                    ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+                    _flashMessage.Danger(exception.Message);
+                    return View(document);
                 }
+                ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+                return Json(new
+                {
+                    isValid = true,
+                    html = ModalHelper.RenderRazorViewToString(this, "_ViewAll",
+                _context.Areas.ToList())
+                });
             }
-            ViewBag.items = GetAreasAsync().Result;
-            return View(document);
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", document) });
         }
-        [Authorize(Roles = "Administrador")]
 
+        [NoDirectAccess]
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Documents == null)
-            {
-                return NotFound();
-            }
-
-            var document = await _context.Documents
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (document == null)
-            {
-                return NotFound();
-            }
-
-            return View(document);
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Documents == null)
-            {
-                return Problem("Entity set 'DataContext.Documents'  is null.");
-            }
-            var document = await _context.Documents.FindAsync(id);
-            if (document != null)
+            Document document = await _context.Documents.FirstOrDefaultAsync(a => a.Id == id);
+            try
             {
                 _context.Documents.Remove(document);
+                await _context.SaveChangesAsync();
+                _flashMessage.Info("Registro borrado.");
             }
-
-            await _context.SaveChangesAsync();
-            _flashMessage.Danger("Documento eliminado");
+            catch
+            {
+                _flashMessage.Danger("No se puede borrar la documento porque tiene registros relacionados.");
+            }
             return RedirectToAction(nameof(Index));
         }
         //____________________________________________________________________________________________
         private bool DocumentExists(int id)
         {
-            return (_context.Documents?.Any(e => e.id == id)).GetValueOrDefault();
-        }
-        private async Task<IEnumerable<SelectListItem>> GetAreasAsync()
-        {
-            List<Areas> list = await _context.Areas.Select(a => new Areas
-            {
-                id = a.id,
-                name = a.name
-            })
-                .OrderBy(a => a.name)
-                .ToListAsync();
-            List<SelectListItem> items = list.ConvertAll(l =>
-            {
-                return new SelectListItem()
-                {
-                    Text = l.name,
-                    Value = l.name,
-                    Selected = false
-                };
-            });
-            return items;
+            return (_context.Documents?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

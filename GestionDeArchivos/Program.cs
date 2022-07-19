@@ -24,6 +24,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<UserHelper>();
+builder.Services.AddScoped<ModalHelper>();
+builder.Services.AddScoped<GetAreasHelper>();
 
 var app = builder.Build();
 SeedData();

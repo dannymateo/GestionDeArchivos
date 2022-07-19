@@ -4,13 +4,14 @@ namespace GestionDeArchivos.Data.Entities
 {
     public class Areas
     {
-        public int id { get; set; }
+        public int Id { get; set; }
 
-        [Display(Name = "Nombre Archivo")]
+        [Display(Name = "Nombre Area")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public string name { get; set; }
-        public List<Document>? Documents { get; set; }
+        public string Name { get; set; }
+        public ICollection<Document>? Documents { get; set; }
+        public int DocumentNumberArea => Documents == null ? 0 : Documents.Count;
 
     }
 }

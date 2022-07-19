@@ -15,8 +15,8 @@ namespace GestionDeArchivos.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Document>().HasIndex(d => d.name).IsUnique();
-            modelBuilder.Entity<Areas>().HasIndex(a => a.name).IsUnique();
+            modelBuilder.Entity<Document>().HasIndex(d => d.Name).IsUnique();
+            modelBuilder.Entity<Areas>().HasIndex(a => a.Name).IsUnique();
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Correo).IsUnique();
         }
     }
