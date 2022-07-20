@@ -8,7 +8,7 @@ namespace GestionDeArchivos.Data.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Nombre Documento")]
+        [Display(Name = "Nombre documento")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Name { get; set; }
@@ -18,7 +18,7 @@ namespace GestionDeArchivos.Data.Entities
         public string Location { get; set; }
         public int? AreaId { get; set; }
         public int? UsuarioId { get; set; }
-        [Display(Name = "Comentarios")]
+        [Display(Name = "Comentario")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string? Remark { get; set; }
 
@@ -30,10 +30,10 @@ namespace GestionDeArchivos.Data.Entities
         [Display(Name = "Estado")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string DocumentStatus { get; set; }
-        [Display(Name = "Usuario")]
+        [Display(Name = "Entrega")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string? User { get; set; }
-        [Display(Name = "Recibe")]
+        [Display(Name = "Admite")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string? UserRecibes { get; set; }
     }

@@ -3,9 +3,7 @@ using GestionDeArchivos.Data.Entities;
 using GestionDeArchivos.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Vereyon.Web;
 using static GestionDeArchivos.Helpers.ModalHelper;
 
 namespace GestionDeArchivos.Controllers
@@ -13,13 +11,11 @@ namespace GestionDeArchivos.Controllers
     public class DocumentsController : Controller
     {
         private readonly DataContext _context;
-        private readonly IFlashMessage _flashMessage;
         private readonly GetAreasHelper _getAreasHelper;
 
-        public DocumentsController(DataContext context, IFlashMessage flashMessage, GetAreasHelper getAreasHelper)
+        public DocumentsController(DataContext context, GetAreasHelper getAreasHelper)
         {
             _context = context;
-            _flashMessage = flashMessage;
             _getAreasHelper = getAreasHelper;
         }
         [Authorize(Roles = "Administrador")]
@@ -57,14 +53,13 @@ namespace GestionDeArchivos.Controllers
                     document.UsuarioId = user.Id;
                     _context.Add(document);
                     await _context.SaveChangesAsync();
-                    _flashMessage.Confirmation("Guardado exitoso.");
                     return RedirectToAction(nameof(Create));
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(nameof(document.Name), "Ya existe un documento con este nombre. ");
+                        ModelState.AddModelError(string.Empty, "Ya existe un documento con este nombre. ");
                     }
                     else
                     {
@@ -134,18 +129,18 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(nameof(document.Name), "Ya existe un documento con este nombre. ");
+                        ModelState.AddModelError(string.Empty, "Ya existe un documento con este nombre. ");
                     }
                     else
                     {
-                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
+                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
                     }
                     ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
                     return View(document);
                 }
                 catch (Exception exception)
                 {
-                    _flashMessage.Danger(exception.Message);
+                    ModelState.AddModelError(string.Empty, exception.Message);
                     return View(document);
                 }
                 ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
@@ -168,11 +163,10 @@ namespace GestionDeArchivos.Controllers
             {
                 _context.Documents.Remove(document);
                 await _context.SaveChangesAsync();
-                _flashMessage.Info("Registro borrado.");
             }
             catch
             {
-                _flashMessage.Danger("No se puede borrar la documento porque tiene registros relacionados.");
+                ModelState.AddModelError(string.Empty,"No se puede borrar la documento porque tiene registros relacionados.");
             }
             return RedirectToAction(nameof(Index));
         }

@@ -7,20 +7,21 @@ namespace GestionDeArchivos.Data.Entities
     {
         public int Id { get; set; }
 
-        [Display(Name = "Nombre Usuario")]
+        [Display(Name = "Nombre usuario")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Nombre { get; set; }
 
         [Display(Name = "Correo")]
+        [EmailAddress]
         [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Correo { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} caracteres.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} caracteres.", MinimumLength = 6 )]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Clave { get; set; }
 
         [Display(Name = "Rol")]

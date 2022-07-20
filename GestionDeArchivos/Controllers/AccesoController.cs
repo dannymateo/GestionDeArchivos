@@ -1,6 +1,4 @@
-﻿using GestionDeArchivos.Data;
-using GestionDeArchivos.Data.Entities;
-using GestionDeArchivos.Helpers;
+﻿using GestionDeArchivos.Helpers;
 using GestionDeArchivos.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -53,7 +51,7 @@ namespace GestionDeArchivos.Controllers
             }
             else
             {
-                ModelState.AddModelError(nameof(usuario.Clave), "Correo o contraseña invalida. ");
+                ModelState.AddModelError(nameof(usuario.Clave), "Correo o Contraseña inválida. ");
                 return View(usuario);
             }
 

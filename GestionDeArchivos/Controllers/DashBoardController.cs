@@ -23,7 +23,7 @@ namespace GestionDeArchivos.Controllers
             ViewBag.DocumentsRevisadosPorMi = _context.Documents.Where(d => d.DocumentStatus == "Revisar" && d.UserRecibes == (User.Identity.Name)).Count();
             ViewBag.DocumentsAprobar = _context.Documents.Where(d => d.DocumentStatus == "Aprobar").Count();
 
-            return View(await _context.Documents.Where(d => d.DocumentStatus == "Aprobar").ToListAsync());
+            return View(await _context.Documents.Where(d => d.DocumentStatus == "Aprobar").Take(10).ToListAsync());
         }
     }
 }

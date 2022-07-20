@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestionDeArchivos.Data;
 using GestionDeArchivos.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Vereyon.Web;
 using static GestionDeArchivos.Helpers.ModalHelper;
 using GestionDeArchivos.Helpers;
 
@@ -19,11 +13,9 @@ namespace GestionDeArchivos.Controllers
     public class UsuariosController : Controller
     {
         private readonly DataContext _context;
-        private readonly IFlashMessage _flashMessage;
-        public UsuariosController(DataContext context, IFlashMessage flashMessage)
+        public UsuariosController(DataContext context)
         {
             _context = context;
-            _flashMessage = flashMessage;
         }
 
         // GET: Usuarios
@@ -64,30 +56,28 @@ namespace GestionDeArchivos.Controllers
                     {
                         _context.Add(usuario);
                         await _context.SaveChangesAsync();
-                        _flashMessage.Info("Registro creado.");
                     }
                     else //Update
                     {
                         _context.Update(usuario);
                         await _context.SaveChangesAsync();
-                        _flashMessage.Info("Registro actualizado.");
                     }
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        _flashMessage.Danger("Ya existe un usuario con el mismo nombre.");
+                        ModelState.AddModelError(string.Empty, "Ya existe un usuario con el mismo nombre.");
                     }
                     else
                     {
-                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
+                        ModelState.AddModelError(string.Empty, (dbUpdateException.InnerException.Message));
                     }
                     return View(usuario);
                 }
                 catch (Exception exception)
                 {
-                    _flashMessage.Danger(exception.Message);
+                    ModelState.AddModelError(string.Empty,(exception.Message));
                     return View(usuario);
                 }
                 return Json(new
@@ -108,11 +98,9 @@ namespace GestionDeArchivos.Controllers
             {
                 _context.Usuarios.Remove(usuario);
                 await _context.SaveChangesAsync();
-                _flashMessage.Info("Registro borrado.");
             }
             catch
             {
-                _flashMessage.Danger("No se puede borrar el usuario porque tiene registros relacionados.");
             }
             return RedirectToAction(nameof(Index));
         }
