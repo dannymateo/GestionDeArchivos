@@ -1,6 +1,7 @@
 ﻿using GestionDeArchivos.Data;
 using GestionDeArchivos.Data.Entities;
 using GestionDeArchivos.Helpers;
+using GestionDeArchivos.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
@@ -12,16 +13,22 @@ namespace GestionDeArchivos.Controllers
 {
     public class AccesoController : Controller
     {
-        private readonly DataContext _context;
         private readonly IFlashMessage _flashMessage;
         private readonly UserHelper _helper;
+
+        public AccesoController(IFlashMessage flashMessage, UserHelper helper)
+        {
+            _flashMessage = flashMessage;
+            _helper = helper;
+
+        }
 
         public ActionResult Index()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Index(Usuario _usuario)
+        public async Task<IActionResult> Index(UsuarioViewModel _usuario)
         {
             var usuario = _helper.ValidarUsuario(_usuario.Correo, _usuario.Clave);
 
@@ -46,7 +53,8 @@ namespace GestionDeArchivos.Controllers
             }
             else
             {
-                return View();
+                ModelState.AddModelError(nameof(usuario.Clave), "Correo o contraseña invalida. ");
+                return View(usuario);
             }
 
         }
@@ -63,15 +71,6 @@ namespace GestionDeArchivos.Controllers
         public IActionResult NotAuthorized()
         {
             return View();
-        }
-        //______________________________________________________________
-
-        public AccesoController(DataContext context, IFlashMessage flashMessage, UserHelper helper)
-        {
-            _context = context;
-            _flashMessage = flashMessage;
-            _helper = helper;
-
         }
     }
 }

@@ -30,7 +30,6 @@
 </head>
 <body>
     @*------ GOOGLEAR ====> form bootstrap 5 ----------------*@
-
     <div class="limiter">
 
         <div class="container-login100">
@@ -38,10 +37,11 @@
                 <div class="login100-pic js-tilt" data-tilt>
                     <img src="images/logoCo.png" alt="IMG">
                 </div>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                 <form class="login100-form validate-form asp-controller="Acceso" asp-action="Index" method="post">
                     <span class="login100-form-title">
-						Iniciar Sesion
-					</span>
+                        Iniciar Sesion
+                    </span>
                     <div class="wrap-input100 validate-input" data-validate="El usuario es requerido">
                         <input class="input100" placeholder="Correo" type="email" class="form-control" asp-for="Correo">
                         <span class="focus-input100"></span>
@@ -60,6 +60,9 @@
                             <i id="iconPass" class="bi bi-eye-fill"></i><p id="msjPass" style="margin-left: 19px;">Mostrar Contraseña</p>
                         </button>
                     </div>
+                    <br>
+                    <span asp-validation-for="Clave" class="text-danger"></span>
+
 
                     <br>
 

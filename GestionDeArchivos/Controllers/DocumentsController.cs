@@ -64,7 +64,7 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        _flashMessage.Danger("Ya existe un Documento con este mismo nombre.");
+                        ModelState.AddModelError(nameof(document.Name), "Ya existe un documento con este nombre. ");
                     }
                     else
                     {
@@ -118,8 +118,7 @@ namespace GestionDeArchivos.Controllers
                         document.AreaId = area.Id;
                         document.UsuarioId = user.Id;
                         _context.Add(document);
-                        await _context.SaveChangesAsync();
-                        _flashMessage.Info("Registro creado.");
+                        await _context.SaveChangesAsync();;
                     }
                     else //Update
                     {
@@ -129,14 +128,13 @@ namespace GestionDeArchivos.Controllers
                         document.AreaId = area.Id;
                         _context.Update(document);
                         await _context.SaveChangesAsync();
-                        _flashMessage.Info("Registro actualizado.");
                     }
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        _flashMessage.Danger("Ya existe un documento con el mismo nombre.");
+                        ModelState.AddModelError(nameof(document.Name), "Ya existe un documento con este nombre. ");
                     }
                     else
                     {
@@ -147,7 +145,6 @@ namespace GestionDeArchivos.Controllers
                 }
                 catch (Exception exception)
                 {
-                    ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
                     _flashMessage.Danger(exception.Message);
                     return View(document);
                 }
@@ -159,6 +156,7 @@ namespace GestionDeArchivos.Controllers
                 _context.Areas.ToList())
                 });
             }
+            ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
             return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", document) });
         }
 
