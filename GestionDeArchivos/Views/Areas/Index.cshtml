@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<GestionDeArchivos.Data.Entities.Areas>
 
 @{
-    ViewData["Title"] = "Areas";
+    ViewData["Title"] = "Áreas";
 }
 <flash dismissable="true" />
 
@@ -9,7 +9,7 @@
     <div class="card p-3">
 
             <div class="form-group row">
-                <a onclick="showInPopup('@Url.Action("AddOrEdit", "Areas", new { id = 0 }, Context.Request.Scheme)' , 'Nueva Area')" class="btn btn-success fa fa-plus-circle"><i class="fa fa-bookmark"></i> Area</a>
+                <a onclick="showInPopup('@Url.Action("AddOrEdit", "Areas", new { id = 0 }, Context.Request.Scheme)' , 'Nueva Área')" class="btn btn-success fa fa-plus-circle"><i class="fa fa-bookmark"></i> Área</a>
 
             </div>
     </div>

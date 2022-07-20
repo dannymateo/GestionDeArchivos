@@ -4,7 +4,6 @@
     Layout = null;
 }
 <flash dismissable="true" />
-<div class="modal-dialog" role="document">
 
     <div class="container smfont">
         <form asp-action="AddOrEdit" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
@@ -46,7 +45,6 @@
             </div>
         </form>
     </div>
-</div>
 @section Scripts {
 @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -13,7 +13,7 @@ namespace GestionDeArchivos.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Name { get; set; }
 
-        [Display(Name = "Area")]
+        [Display(Name = "Área")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string Location { get; set; }
         public int? AreaId { get; set; }

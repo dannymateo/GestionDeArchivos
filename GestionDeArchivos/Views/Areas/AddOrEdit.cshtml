@@ -6,7 +6,6 @@
 <flash dismissable="true" />
 <div asp-validation-summary="All" class="text-danger"></div>
 
-<div class="modal-dialog" role="document">
     <div class="container smfont">
 
         <form asp-action="AddOrEdit" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
@@ -28,8 +27,6 @@
             </div>
         </form>
     </div>
-</div>
-
 
 @section Scripts {
 @{
