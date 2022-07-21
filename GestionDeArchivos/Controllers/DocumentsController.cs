@@ -129,18 +129,18 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Ya existe un documento con este nombre. ");
+                        ModelState.AddModelError(document.Name, "Ya existe un documento con este nombre. ");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        ModelState.AddModelError(document.Name, dbUpdateException.InnerException.Message);
                     }
                     ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
                     return View(document);
                 }
                 catch (Exception exception)
                 {
-                    ModelState.AddModelError(string.Empty, exception.Message);
+                    ModelState.AddModelError(document.Name, exception.Message);
                     return View(document);
                 }
                 ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
