@@ -16,6 +16,7 @@ namespace GestionDeArchivos.Data
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Document>().HasIndex(d => d.Name).IsUnique();
+            modelBuilder.Entity<Document>().HasIndex("Name").IsUnique();
             modelBuilder.Entity<Areas>().HasIndex(a => a.Name).IsUnique();
             modelBuilder.Entity<Usuario>().HasIndex(u => u.Correo).IsUnique();
         }

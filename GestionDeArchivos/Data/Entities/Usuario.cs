@@ -31,7 +31,8 @@ namespace GestionDeArchivos.Data.Entities
         public string Roles { get; set; }
 
         public ICollection<Document>? Documents { get; set; }
-        public int DocumentsNumberUser => Documents == null ? 0 : Documents.Count;
+        [Display(Name = "# Documentos")]
+        public int DocumentsNumber => Documents == null ? 0 : Documents.Count;
 
     }
 }

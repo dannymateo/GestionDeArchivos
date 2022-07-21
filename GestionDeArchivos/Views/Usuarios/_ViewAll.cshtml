@@ -16,7 +16,8 @@
                 @Html.DisplayNameFor(model => model.Roles)
             </th>
             <th>
-                Documentos por revisar
+                @Html.DisplayNameFor(model => model.DocumentsNumber)
+
             </th>
             <th>Acciones</th>
         </tr>
@@ -32,13 +33,13 @@
                     @Html.DisplayFor(modelItem => item.Correo)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Clave) 
+                    @Html.DisplayFor(modelItem => item.Clave)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Roles)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.DocumentsNumberUser)
+                    @Html.DisplayFor(modelItem => item.DocumentsNumber)
                 </td>
                 <td>
                     <a onclick="showInPopup('@Url.Action("AddOrEdit", "Usuarios", new { id=item.Id },

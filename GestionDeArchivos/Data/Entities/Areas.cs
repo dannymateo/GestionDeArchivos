@@ -11,7 +11,8 @@ namespace GestionDeArchivos.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Name { get; set; }
         public ICollection<Document>? Documents { get; set; }
-        public int DocumentNumberArea => Documents == null ? 0 : Documents.Count;
+        [Display(Name = "# Documentos")]
+        public int DocumentsNumber => Documents == null ? 0 : Documents.Count;
 
     }
 }

@@ -101,6 +101,7 @@ namespace GestionDeArchivos.Controllers
             }
             catch
             {
+                ModelState.AddModelError(string.Empty, "No se puede borrar el usuario porque tiene registros relacionados.");
             }
             return RedirectToAction(nameof(Index));
         }

@@ -49,8 +49,8 @@ namespace GestionDeArchivos.Controllers
                     Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
                     Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
                     document.User = user.Correo;
-                    document.AreaId = area.Id;
-                    document.UsuarioId = user.Id;
+                    document.Areas = area;
+                    document.Usuario = user;
                     _context.Add(document);
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Create));
@@ -110,8 +110,8 @@ namespace GestionDeArchivos.Controllers
                         Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
                         Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
                         document.User = user.Correo;
-                        document.AreaId = area.Id;
-                        document.UsuarioId = user.Id;
+                        document.Areas = area;
+                        document.Usuario = user;
                         _context.Add(document);
                         await _context.SaveChangesAsync();;
                     }
@@ -120,7 +120,7 @@ namespace GestionDeArchivos.Controllers
                         Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
                         Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
                         document.UserRecibes = user.Correo;
-                        document.AreaId = area.Id;
+                        document.Areas = area;
                         _context.Update(document);
                         await _context.SaveChangesAsync();
                     }
