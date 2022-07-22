@@ -4,55 +4,50 @@
     ViewData["Title"] = "Subir Documento";
 }
 
-<body>
-    <flash dismissable="true" />
+<flash dismissable="true" />
 
 
-    <div class="container smfont">
-        <form asp-action="Create" class="form1">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="box-body">
-                <input type="hidden" asp-for="User" />
-                <input type="hidden" asp-for="Date" />
+<div class="card p-2">
+    <form asp-action="Create" class="form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="from-group">
+            <input type="hidden" asp-for="User" />
+            <input type="hidden" asp-for="Date" />
 
-                <div>
-                    <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
-                <div>
-                    <label asp-for="Remark" class="control-label"></label>
-                    <textarea asp-for="Remark" class="form-control"></textarea>
-                    <span asp-validation-for="Remark" class="text-danger"></span>
-                </div>
-                <div>
-                    <label asp-for="DocumentStatus" class="control-label"></label>
-                    <select name="DocumentStatus" class="form-select">
-                        <option value="Aprobar">Aprobar</option>
-                    </select>
-                </div>
-                @{
-                    List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
-                }
-                <div>
-                    <label asp-for="Location" class="control-label"></label>
-                    <select asp-for="Location" asp-items="@items" class="browser-default form-select">
-                    </select>
-                    <span asp-validation-for="Location" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                </div>
-
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
-                </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-        </form>
-    </div>
+            <div class="form-group">
+                <label asp-for="Remark" class="control-label"></label>
+                <textarea asp-for="Remark" class="form-control"></textarea>
+                <span asp-validation-for="Remark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DocumentStatus" class="control-label"></label>
+                <select name="DocumentStatus" class="form-select">
+                    <option value="Aprobar">Aprobar</option>
+                </select>
+            </div>
+            @{
+                List<SelectListItem> items = (List<SelectListItem>)ViewBag.items;
+            }
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <select asp-for="Location" asp-items="@items" class="select-form">
+                </select>
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-    @section Scripts {
+@section Scripts {
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     }
-</body>
