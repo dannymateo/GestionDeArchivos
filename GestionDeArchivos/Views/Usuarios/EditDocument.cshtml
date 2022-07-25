@@ -30,7 +30,7 @@
             <div>
                 <label asp-for="Location" class="control-label"></label>
                 <span class="required">*</span>
-                <select asp-for="Location" asp-items="@items" class="browser-default form-select">
+                <select asp-for="Location" asp-items="@items" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                 </select>
                 <span asp-validation-for="Location" class="text-danger"></span>
             </div>

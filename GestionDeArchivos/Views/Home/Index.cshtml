@@ -7,6 +7,20 @@
 </div>
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Aplicativo de archivos</h1>
+    <p align="left">En esta aplicación subiremos los archivos que vamos a llevar al centro de archivos, es una aplicacion muy compacta y facil de utilizar.</p>
+    <br />
+    <p align="left">En el apartado izquierdo nos encontraremos con un menú...</p>
+    <br />
+    @if (User.IsInRole("Administrador"))
+    {
+        <p align="left">_Encontraras unas estadísticas en las cuales veras un resumen de lo que hay en la aplicacion(Usuarios, documentos en todos los estados y una lista de los 10 primeros documentos por aprobar).</p>
+        <p align="left">_Encontraras otro menú de Archivos, acá podras visualizar todos los documentos y su información, darles el check, subirlos, visualizar los documentos que debes revisar.</p>
+        <p align="left">_Encontraras unas áreas, acá podras crear las areas correspondientes a donde van los archivos.</p>
+        <p align="left">_Encontraras unos usuarios, acá podras crear y editar a todos los usuarios de la aplicación.</p>
+    }
+    @if (User.IsInRole("Usuario"))
+    {
+        <p align="left">_Encontraras un menú de archivos, acá podras subir y visualizar los documentos que debes revisar.</p>
+    }
 </div>
