@@ -32,7 +32,7 @@
             <!-- Left navbar links -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button" style="color: #3CB3C1;font-size: 20px;"><i class="fas fa-bars"></i></a>
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button" style="color: #292D5F;font-size: 20px;"><i class="fas fa-bars"></i></a>
                 </li>
                 <li class="nav-item d-none d-sm-inline-block">
                     <a href="#" class="nav-link"> <strong>@ViewData["Title"]</strong></a>
@@ -42,7 +42,7 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Acceso" asp-action="Salir" style="font-size:20px;color:#3CB3C1">
+                    <a class="nav-link" asp-area="" asp-controller="Acceso" asp-action="Salir" style="font-size:20px;color:#292D5F">
                         <i class="fas fa-sign-out-alt"></i>
                     </a>
                 </li>
@@ -50,11 +50,11 @@
         </nav>
         <!-- /.navbar -->
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-light-info position-fixed" style="background-color: #3CB3C1;">
+        <aside class="main-sidebar sidebar-light-info position-fixed" style="background-color: #292D5F;">
             <!-- Brand Logo -->
-            <a asp-area="" asp-controller="Home" asp-action="Index" class="brand-link">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="brand-link" style="background:white">
                 <img src="~/admin-editada/dist/img/logoC.png" alt="AdminLTE Logo" class="brand-image img-circle" style="opacity: 1">
-                <span class="brand-text font-weight-light" style="color: white;"> <strong> Cotrafa Social </strong></span>
+                <span class="brand-text font-weight-light" style="color: white;"> <b style="color:#292D5F"> Cotrafa Social </b></span>
             </a>
 
             <!-- Sidebar -->
@@ -99,7 +99,7 @@
                                 @if (User.IsInRole("Administrador"))
                                 {
                                     <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Documents" asp-action="Index" style="color:black">
+                                        <a class="nav-link" asp-area="" asp-controller="Documents" asp-action="Index" style="color:#E08E21">
                                             <i class="fas fa-stream nav-icon"></i>
                                             <p>Lista de documentos</p>
                                         </a>
@@ -110,13 +110,13 @@
 
                                     <li class="nav-item">
 
-                                        <a class="nav-link" asp-area="" asp-controller="Documents" asp-action="Create" style="color:black">
+                                        <a class="nav-link" asp-area="" asp-controller="Documents" asp-action="Create" style="color:#E08E21">
                                             <i class="fas fa-folder-plus nav-icon"></i>
                                             <p>Subir documento</p>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="DocumentsUser" style="color:black">
+                                        <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="DocumentsUser" style="color:#E08E21">
                                             <i class="fas fa-exclamation nav-icon"></i>
                                             <p>Documentos por revisar</p>
                                         </a>

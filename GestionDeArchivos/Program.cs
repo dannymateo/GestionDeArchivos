@@ -23,10 +23,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         option.AccessDeniedPath = "/Acceso/NotAuthorized";
     });
 builder.Services.AddTransient<SeedDb>();
-builder.Services.AddScoped<UserHelper>();
-builder.Services.AddScoped<ModalHelper>();
-builder.Services.AddScoped<GetAreasHelper>();
-
+builder.Services.AddScoped<IUserHelper,UserHelper>();
+builder.Services.AddScoped<IGetAreasHelper,GetAreasHelper>();
 var app = builder.Build();
 SeedData();
 

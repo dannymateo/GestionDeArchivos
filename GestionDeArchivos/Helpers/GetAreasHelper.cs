@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestionDeArchivos.Helpers
 {
-    public class GetAreasHelper
+    public class GetAreasHelper: IGetAreasHelper
     {
         private readonly DataContext _context;
         public GetAreasHelper(DataContext context)

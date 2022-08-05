@@ -3,7 +3,7 @@ using GestionDeArchivos.Data.Entities;
 
 namespace GestionDeArchivos.Helpers
 {
-    public class UserHelper
+    public class UserHelper: IUserHelper
     {
         private readonly DataContext _context;
         public UserHelper(DataContext context)

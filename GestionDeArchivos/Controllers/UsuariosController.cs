@@ -12,9 +12,9 @@ namespace GestionDeArchivos.Controllers
     public class UsuariosController : Controller
     {
         private readonly DataContext _context;
-        private readonly GetAreasHelper _getAreasHelper;
+        private readonly IGetAreasHelper _getAreasHelper;
 
-        public UsuariosController(DataContext context, GetAreasHelper getAreasHelper)
+        public UsuariosController(DataContext context, IGetAreasHelper getAreasHelper)
         {
             _context = context;
             _getAreasHelper = getAreasHelper;

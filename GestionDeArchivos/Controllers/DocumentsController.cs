@@ -11,9 +11,9 @@ namespace GestionDeArchivos.Controllers
     public class DocumentsController : Controller
     {
         private readonly DataContext _context;
-        private readonly GetAreasHelper _getAreasHelper;
+        private readonly IGetAreasHelper _getAreasHelper;
 
-        public DocumentsController(DataContext context, GetAreasHelper getAreasHelper)
+        public DocumentsController(DataContext context, IGetAreasHelper getAreasHelper)
         {
             _context = context;
             _getAreasHelper = getAreasHelper;

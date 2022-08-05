@@ -12,9 +12,9 @@ namespace GestionDeArchivos.Controllers
     public class AccesoController : Controller
     {
         private readonly IFlashMessage _flashMessage;
-        private readonly UserHelper _helper;
+        private readonly IUserHelper _helper;
 
-        public AccesoController(IFlashMessage flashMessage, UserHelper helper)
+        public AccesoController(IFlashMessage flashMessage, IUserHelper helper)
         {
             _flashMessage = flashMessage;
             _helper = helper;
