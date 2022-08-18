@@ -59,6 +59,10 @@ namespace GestionDeArchivos.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(int id, Usuario usuario)
         {
+            if (usuario == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -105,6 +109,10 @@ namespace GestionDeArchivos.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(a => a.Id == id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
             try
             {
                 _context.Usuarios.Remove(usuario);
@@ -119,10 +127,10 @@ namespace GestionDeArchivos.Controllers
         [NoDirectAccess]
         public async Task<IActionResult> EditDocument(int id)
         {
-                Document document = await _context.Documents.FindAsync(id);
-                if (document == null)
-                {
-                    return NotFound();
+            Document document = await _context.Documents.FindAsync(id);
+            if (document == null)
+            {
+                return NotFound();
             }
             else
             {
@@ -141,12 +149,16 @@ namespace GestionDeArchivos.Controllers
             {
                 try
                 {
-                        Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
-                        Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
-                        document.UserRecibes = "";
-                        document.Areas = area;
-                        _context.Update(document);
-                        await _context.SaveChangesAsync();
+                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
+                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
+                    if (area == null || user == null)
+                    {
+                        return NotFound();
+                    }
+                    document.UserRecibes = "";
+                    document.Areas = area;
+                    _context.Update(document);
+                    await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateException dbUpdateException)
                 {

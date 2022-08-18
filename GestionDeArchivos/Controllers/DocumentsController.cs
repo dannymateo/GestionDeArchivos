@@ -48,6 +48,10 @@ namespace GestionDeArchivos.Controllers
                 {
                     Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
                     Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
+                    if(user == null || area == null)
+                    {
+                        return NotFound();
+                    }
                     document.User = user.Correo;
                     document.Areas = area;
                     document.Usuario = user;
@@ -109,6 +113,10 @@ namespace GestionDeArchivos.Controllers
                     {
                         Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
                         Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
+                        if (user == null || area == null)
+                        {
+                            return NotFound();
+                        }
                         document.User = user.Correo;
                         document.Areas = area;
                         document.Usuario = user;
@@ -119,6 +127,10 @@ namespace GestionDeArchivos.Controllers
                     {
                         Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
                         Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
+                        if (user == null || area == null)
+                        {
+                            return NotFound();
+                        }
                         document.UserRecibes = user.Correo;
                         document.Areas = area;
                         _context.Update(document);
@@ -159,6 +171,10 @@ namespace GestionDeArchivos.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             Document document = await _context.Documents.FirstOrDefaultAsync(a => a.Id == id);
+            if (document == null)
+            {
+                return NotFound();
+            }
             try
             {
                 _context.Documents.Remove(document);

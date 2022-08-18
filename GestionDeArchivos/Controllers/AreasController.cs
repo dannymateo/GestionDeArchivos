@@ -47,6 +47,10 @@ namespace GestionDeArchivos.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(int id, Areas areas)
         {
+            if(areas == null)
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -94,6 +98,10 @@ namespace GestionDeArchivos.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             Areas areas = await _context.Areas.FirstOrDefaultAsync(a => a.Id == id);
+            if (areas == null)
+            {
+                return NotFound();
+            }
             try
             {
                 _context.Areas.Remove(areas);
