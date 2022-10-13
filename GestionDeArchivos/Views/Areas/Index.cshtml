@@ -3,14 +3,14 @@
 @{
     ViewData["Title"] = "Áreas";
 }
-<flash dismissable="true" />
+<flash dismissable="false" />
 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 <div class="row-12">
     <div class="card p-3">
 
         <div class="form-group row">
-            <a onclick="showInPopup('@Url.Action("AddOrEdit", "Areas", new { id = 0 }, Context.Request.Scheme)' , 'Nueva área')" class="btn btn-success"><i class="fa fa-bookmark"></i> Área</a>
+            <a style="color:white" onclick="showInPopup('@Url.Action("AddOrEdit", "Areas", new { id = 0 }, Context.Request.Scheme)' , 'Nueva área')" class="btn btn-success"><i class="fa fa-bookmark"></i> Área</a>
 
         </div>
     </div>

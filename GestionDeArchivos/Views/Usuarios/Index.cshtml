@@ -3,13 +3,13 @@
 @{
     ViewData["Title"] = "Lista de Usuarios";
 }
-<flash dismissable="true" />
+<flash dismissable="false" />
 
 <div class="row-12">
     <div class="card p-3">
 
             <div class="form-group row">
-                <a onclick="showInPopup('@Url.Action("AddOrEdit", "Usuarios", new { id = 0 }, Context.Request.Scheme)' , 'Nuevo Usuario')" class="btn btn-success fa fa-plus-circle"><i class="fa fa-bookmark"></i> Usuario</a>
+                <a style="color:white" onclick="showInPopup('@Url.Action("AddOrEdit", "Usuarios", new { id = 0 }, Context.Request.Scheme)' ,'Nuevo Usuario')" class="btn btn-success fa fa-plus-circle"><i class="fa fa-bookmark"></i> Usuario</a>
             </div>
     </div>
 </div>

@@ -5,6 +5,7 @@ using GestionDeArchivos.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using static GestionDeArchivos.Helpers.ModalHelper;
 using GestionDeArchivos.Helpers;
+using Vereyon.Web;
 
 namespace GestionDeArchivos.Controllers
 {
@@ -13,11 +14,13 @@ namespace GestionDeArchivos.Controllers
     {
         private readonly DataContext _context;
         private readonly IGetAreasHelper _getAreasHelper;
+        private readonly IFlashMessage _flashMessage;
 
-        public UsuariosController(DataContext context, IGetAreasHelper getAreasHelper)
+        public UsuariosController(DataContext context, IFlashMessage flashMessage, IGetAreasHelper getAreasHelper)
         {
             _context = context;
             _getAreasHelper = getAreasHelper;
+            _flashMessage = flashMessage;
         }
 
         // GET: Usuarios
@@ -69,11 +72,15 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (id == 0) //Insert
                     {
+                        _flashMessage.Confirmation("Se inserto correctamente el usuario. ");
+                        usuario.Correo = usuario.Correo.ToUpper();
                         _context.Add(usuario);
                         await _context.SaveChangesAsync();
                     }
                     else //Update
                     {
+                        _flashMessage.Confirmation("Se actualizo correctamente el usuario. ");
+                        usuario.Correo = usuario.Correo.ToUpper();
                         _context.Update(usuario);
                         await _context.SaveChangesAsync();
                     }
@@ -82,17 +89,17 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Ya existe un usuario con el mismo nombre.");
+                        _flashMessage.Danger("Ya existe un usuario con el mismo nombre. ");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, (dbUpdateException.InnerException.Message));
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
                     return View(usuario);
                 }
                 catch (Exception exception)
                 {
-                    ModelState.AddModelError(string.Empty, (exception.Message));
+                    _flashMessage.Danger(exception.Message);
                     return View(usuario);
                 }
                 return Json(new
@@ -117,10 +124,11 @@ namespace GestionDeArchivos.Controllers
             {
                 _context.Usuarios.Remove(usuario);
                 await _context.SaveChangesAsync();
+                _flashMessage.Confirmation("Usuario eliminada correctamente. ");
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "No se puede borrar el usuario porque tiene registros relacionados.");
+                _flashMessage.Danger("No se puede borrar el usuario porque tiene registros relacionados. ");
             }
             return RedirectToAction(nameof(Index));
         }
@@ -158,24 +166,25 @@ namespace GestionDeArchivos.Controllers
                     document.UserRecibes = "";
                     document.Areas = area;
                     _context.Update(document);
+                    _flashMessage.Confirmation("Documento eliminado correctamente. ");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateException dbUpdateException)
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(document.Name, "Ya existe un documento con este nombre. ");
+                        _flashMessage.Danger("Ya existe un documento con el mismo nombre. ");
                     }
                     else
                     {
-                        ModelState.AddModelError(document.Name, dbUpdateException.InnerException.Message);
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
                     ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
                     return View(document);
                 }
                 catch (Exception exception)
                 {
-                    ModelState.AddModelError(document.Name, exception.Message);
+                    _flashMessage.Danger(exception.Message);
                     return View(document);
                 }
                 ViewBag.items = _getAreasHelper.GetAreasAsync().Result;

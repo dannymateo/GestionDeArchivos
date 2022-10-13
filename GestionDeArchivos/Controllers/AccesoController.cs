@@ -28,11 +28,11 @@ namespace GestionDeArchivos.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(UsuarioViewModel _usuario)
         {
+            _usuario.Correo = _usuario.Correo.ToUpper();
             var usuario = _helper.ValidarUsuario(_usuario.Correo, _usuario.Clave);
 
             if (usuario != null)
             {
-
                 //2.- CONFIGURACION DE LA AUTENTICACION
                 #region AUTENTICACTION
                 var claims = new List<Claim>
@@ -51,7 +51,7 @@ namespace GestionDeArchivos.Controllers
             }
             else
             {
-                ModelState.AddModelError(nameof(usuario.Clave), "Correo o Contraseña inválida. ");
+                _flashMessage.Danger("Correo o Contraseña inválida. ");
                 return View(usuario);
             }
 

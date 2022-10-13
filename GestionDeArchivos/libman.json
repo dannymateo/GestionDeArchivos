@@ -5,6 +5,10 @@
     {
       "library": "jqueryui@1.12.1",
       "destination": "wwwroot/lib/jqueryui/"
+    },
+    {
+      "library": "font-awesome@6.2.0",
+      "destination": "wwwroot/lib/font-awesome/"
     }
   ]
 }

@@ -18,7 +18,7 @@ namespace GestionDeArchivos.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Correo { get; set; }
 
-        [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} caracteres.", MinimumLength = 6 )]
+        [StringLength(20, ErrorMessage = "La {0} debe tener al menos {2} caracteres.", MinimumLength = 6 )]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]

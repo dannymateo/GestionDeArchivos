@@ -26,7 +26,6 @@
     <link rel="stylesheet" type="text/css" href="Login_cotrafa-master/css/util.css">
     <link rel="stylesheet" type="text/css" href="Login_cotrafa-master/css/main.css">
     <!--===============================================================================================-->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 <body>
     @*------ GOOGLEAR ====> form bootstrap 5 ----------------*@
@@ -37,11 +36,11 @@
                 <div class="login100-pic js-tilt" data-tilt>
                     <img src="images/logoCo.png" alt="IMG">
                 </div>
-                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                 <form class="login100-form validate-form asp-controller="Acceso" asp-action="Index" method="post">
                     <span class="login100-form-title">
                         Iniciar Sesión
                     </span>
+                        <flash dismissable="false" />
                     <div class="wrap-input100 validate-input" data-validate="El usuario es requerido">
                         <input class="input100" placeholder="Correo" type="email" class="form-control" asp-for="Correo">
                         <span class="focus-input100"></span>
@@ -62,8 +61,6 @@
                     </div>
                     <br>
                     <span asp-validation-for="Clave" class="text-danger"></span>
-
-
                     <br>
 
                     <div class="container-login100-form-btn">
@@ -76,25 +73,7 @@
         </div>
     </div>
 
-
-
-    <script>
-        function mostrarContrasena() {
-            var tipo = document.getElementById("pass");
-            var msjPass = document.getElementById("msjPass");
-            var iconPass = document.getElementById("iconPass");
-
-            if (tipo.type == "password") {
-                tipo.type = "text";
-                iconPass.classList.replace("bi-eye-fill", "bi-eye-slash");
-                msjPass.textContent = "Ocultar Contraseña"
-            } else {
-                tipo.type = "password";
-                iconPass.classList.replace("bi-eye-slash", "bi-eye-fill");
-                msjPass.textContent = "Mostrar Contraseña"
-            }
-        }
-    </script>
+    <script src="js/js.js"></script>
     <!--===============================================================================================-->
     <script src="Login_cotrafa-master/vendor/jquery/jquery-3.2.1.min.js"></script>
     <!--===============================================================================================-->
@@ -111,6 +90,5 @@
     </script>
     <!--===============================================================================================-->
     <script src="Login_cotrafa-master/js/main.js"></script>
-
 </body>
 </html>

@@ -3,7 +3,7 @@
     ViewData["Title"] = "Documento";
     Layout = null;
 }
-<flash dismissable="true" />
+<flash dismissable="false" />
 
     <div class="container smfont">
         <form asp-action="AddOrEdit" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">

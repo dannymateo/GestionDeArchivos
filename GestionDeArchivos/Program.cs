@@ -18,8 +18,8 @@ builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(option => {
-        option.LoginPath = "/Acceso/Index";
-        option.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        option.AccessDeniedPath = "/Acceso/NotAuthorized";
+        //option.ExpireTimeSpan = TimeSpan.FromMinutes(1);
         option.AccessDeniedPath = "/Acceso/NotAuthorized";
     });
 builder.Services.AddTransient<SeedDb>();

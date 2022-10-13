@@ -5,6 +5,7 @@ using GestionDeArchivos.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
 using static GestionDeArchivos.Helpers.ModalHelper;
 using GestionDeArchivos.Helpers;
+using Vereyon.Web;
 
 namespace GestionDeArchivos.Controllers
 {
@@ -12,10 +13,13 @@ namespace GestionDeArchivos.Controllers
     public class AreasController : Controller
     {
         private readonly DataContext _context;
+        private readonly IFlashMessage _flashMessage;
 
-        public AreasController(DataContext context)
+        public AreasController(IFlashMessage flashMessage, DataContext context)
         {
+            _flashMessage = flashMessage;
             _context = context;
+
         }
 
         // GET: Areas
@@ -57,11 +61,13 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (id == 0) //Insert
                     {
+                        _flashMessage.Confirmation("Se inserto correctamente el área. ");
                         _context.Add(areas);
                         await _context.SaveChangesAsync();
                     }
                     else //Update
                     {
+                        _flashMessage.Confirmation("Se actualizo correctamente el área. ");
                         _context.Update(areas);
                         await _context.SaveChangesAsync();
                     }
@@ -70,17 +76,17 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (dbUpdateException.InnerException.Message.Contains("duplicate"))
                     {
-                        ModelState.AddModelError(string.Empty, "Ya existe una área con el mismo nombre.");
+                        _flashMessage.Danger("Ya existe una área con el mismo nombre. ");
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, dbUpdateException.InnerException.Message);
+                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
                     return View(areas);
                 }
                 catch (Exception exception)
                 {
-                    ModelState.AddModelError(string.Empty, exception.Message);
+                    _flashMessage.Danger(exception.Message);
                     return View(areas);
                 }
                 return Json(new
@@ -106,10 +112,11 @@ namespace GestionDeArchivos.Controllers
             {
                 _context.Areas.Remove(areas);
                 await _context.SaveChangesAsync();
+                _flashMessage.Confirmation("Área eliminada correctamente. ");
             }
             catch
             {
-                ModelState.AddModelError(string.Empty, "No se puede borrar el area porque tiene registros relacionados.");
+                _flashMessage.Danger("No se puede borrar el área porque tiene registros relacionados. ");
             }
             return RedirectToAction(nameof(Index));
         }
