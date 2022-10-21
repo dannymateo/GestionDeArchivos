@@ -143,7 +143,7 @@ namespace GestionDeArchivos.Controllers
             else
             {
                 ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
-                document.DocumentStatus = "Aprobar";
+                document.DocumentStatus = "Revisar";
                 document.Date = DateTime.Now;
                 ; return View(document);
             }

@@ -12,6 +12,10 @@ namespace GestionDeArchivos.Data.Entities
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Name { get; set; }
+        [Display(Name = "Tipo de docuemnto")]
+        [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string TypeDocument { get; set; }
 
         [Display(Name = "Área")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
@@ -37,5 +41,6 @@ namespace GestionDeArchivos.Data.Entities
         public string? UserRecibes { get; set; }
         public Usuario? Usuario { get; set; }
         public Areas? Areas { get; set; }
+        public DocumentType? TypeDocuments { get; set; }
     }
 }

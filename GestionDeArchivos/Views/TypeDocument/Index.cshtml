@@ -1,0 +1,61 @@
+﻿@model IEnumerable<GestionDeArchivos.Data.Entities.DocumentType>
+
+@{
+    ViewData["Title"] = "Tipos de documentos";
+}
+<flash dismissable="false" />
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+<div class="row-12">
+    <div class="card p-3">
+
+        <div class="form-group row">
+            <a style="color:white" onclick="showInPopup('@Url.Action("AddOrEdit", "TypeDocument", new { id = 0 }, Context.Request.Scheme)' , 'Nuevo tipo de documento')" class="btn btn-success"><i class="fa fa-bookmark"></i> Tipo de documento</a>
+
+        </div>
+    </div>
+</div>
+
+<div class="row-12">
+
+    <div class="card p-3">
+        @await Html.PartialAsync("_ViewAll", Model)
+    </div>
+</div>
+
+<!--modal placeholder. Also you can place this modal form in the _Layout.cshtml-->
+<div class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static" id="form-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background:#292D5F">
+                <h5 class="modal-title text-white"></h5>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+<partial name="_DeleteDialog" />
+@section Scripts {
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+<script src="~/js/showmodal.js"></script>
+<script>
+    $(function () {
+        $("#example2").DataTable({
+            "responsive": true, "lengthChange": false, "autoWidth": false,
+        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
+    });
+
+</script>
+<script>
+    sc_deleteDialog.openModal('deleteItem', true, 'btnYesDelete', '/TypeDocument/Delete/', false);
+</script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    }

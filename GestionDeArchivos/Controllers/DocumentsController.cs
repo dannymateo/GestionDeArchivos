@@ -1,6 +1,7 @@
 ﻿using GestionDeArchivos.Data;
 using GestionDeArchivos.Data.Entities;
 using GestionDeArchivos.Helpers;
+using GestionDeArchivos.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,14 @@ namespace GestionDeArchivos.Controllers
         private readonly DataContext _context;
         private readonly IFlashMessage _flashMessage;
         private readonly IGetAreasHelper _getAreasHelper;
+        private readonly IGetTypeDocuementsHelper _getTypeDocuementsHelper;
 
-        public DocumentsController(DataContext context, IFlashMessage flashMessage, IGetAreasHelper getAreasHelper)
+        public DocumentsController(DataContext context, IFlashMessage flashMessage, IGetAreasHelper getAreasHelper, IGetTypeDocuementsHelper getTypeDocuementsHelper)
         {
             _flashMessage = flashMessage;
             _context = context;
             _getAreasHelper = getAreasHelper;
+            _getTypeDocuementsHelper = getTypeDocuementsHelper;
         }
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
@@ -31,12 +34,13 @@ namespace GestionDeArchivos.Controllers
 
         [Authorize(Roles = "Administrador,Usuario")]
 
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+            ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
+            ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
             Document document = new()
             {
-                Date = DateTime.Now,
+                Date = DateTime.Today,
                 DocumentStatus = "Aprobar"
             };
             return View(document);
@@ -51,11 +55,13 @@ namespace GestionDeArchivos.Controllers
                 {
                     Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
                     Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
-                    if(user == null || area == null)
+                    DocumentType documentType = await _context.DocumentTypes.FirstOrDefaultAsync(a => a.Name == document.TypeDocument);
+                    if (user == null || area == null || documentType == null)
                     {
                         return NotFound();
                     }
                     document.User = user.Correo;
+                    document.TypeDocuments = documentType;
                     document.Areas = area;
                     document.Usuario = user;
                     _context.Add(document);
@@ -78,18 +84,29 @@ namespace GestionDeArchivos.Controllers
                 {
                     _flashMessage.Danger(exception.Message);
                 }
-            ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+            ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
+            ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
             return View(document);
         }
+        [Authorize(Roles = "Administrador,Usuario")]
+        public async Task<IActionResult> ListDocuments()
+        {
+            return _context.Documents != null ?
+                        View(await _context.Documents.Where(d => d.User == User.Identity.Name).ToListAsync()) :
+                        Problem("Entity set 'DataContext.Documents'  is null.");
+        }
+
         [NoDirectAccess]
         public async Task<IActionResult> AddOrEdit(int id = 0)
         {
+            ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
+            ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+
             if (id == 0)
             {
-                ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
                 Document document = new()
                 {
-                    Date = DateTime.Now,
+                    Date = DateTime.Today,
                     DocumentStatus = "Aprobar"
                 };
                 return View(document);
@@ -101,7 +118,6 @@ namespace GestionDeArchivos.Controllers
                 {
                     return NotFound();
                 }
-                ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
                 return View(document);
             }
         }
@@ -113,16 +129,18 @@ namespace GestionDeArchivos.Controllers
             {
                 try
                 {
+                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
+                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
+                    DocumentType documentType = await _context.DocumentTypes.FirstOrDefaultAsync(a => a.Name == document.TypeDocument);
+                    if (user == null || area == null || documentType == null)
+                    {
+                        return NotFound();
+                    }
+                    document.TypeDocuments = documentType;
+                    document.Areas = area;
                     if (id == 0) //Insert
                     {
-                        Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
-                        Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
-                        if (user == null || area == null)
-                        {
-                            return NotFound();
-                        }
                         document.User = user.Correo;
-                        document.Areas = area;
                         document.Usuario = user;
                         _context.Add(document);
                         _flashMessage.Confirmation("Se inserto correctamente el documento. ");
@@ -130,14 +148,7 @@ namespace GestionDeArchivos.Controllers
                     }
                     else //Update
                     {
-                        Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
-                        Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
-                        if (user == null || area == null)
-                        {
-                            return NotFound();
-                        }
-                        document.UserRecibes = user.Correo;
-                        document.Areas = area;
+                        document.UserRecibes = User.Identity.Name;
                         _context.Update(document);
                         _flashMessage.Confirmation("Se actualizo correctamente el documento. ");
                         await _context.SaveChangesAsync();
@@ -153,7 +164,8 @@ namespace GestionDeArchivos.Controllers
                     {
                         _flashMessage.Danger(document.Name, dbUpdateException.InnerException.Message);
                     }
-                    ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
+                    ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
+                    ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
                     return View(document);
                 }
                 catch (Exception exception)
