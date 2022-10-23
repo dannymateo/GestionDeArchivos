@@ -10,7 +10,7 @@
     <thead style="background-color: #292D5F;color:white;">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TypeDocument)
+                @Html.DisplayNameFor(model => model.TypeDocument.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -19,7 +19,7 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                @Html.DisplayNameFor(model => model.Location.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Remark)
@@ -34,7 +34,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TypeDocument)
+                    @Html.DisplayFor(modelItem => item.TypeDocument.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -43,7 +43,7 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Location)
+                    @Html.DisplayFor(modelItem => item.Location.Name)
                 </td>
                 <td>
                     @if (item.Remark == null)

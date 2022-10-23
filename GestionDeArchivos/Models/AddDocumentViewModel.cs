@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace GestionDeArchivos.Data.Entities
+namespace GestionDeArchivos.Models
 {
-    public class Document
+    public class AddDocumentViewModel
     {
         public int Id { get; set; }
 
@@ -25,12 +23,7 @@ namespace GestionDeArchivos.Data.Entities
         [Display(Name = "Estado")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string DocumentStatus { get; set; }
-        
-        [Display(Name = "Admite")]
-        [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
-        public string? UserRecibes { get; set; }
-        public Usuario? User { get; set; }
-        public Areas? Location { get; set; }
-        public DocumentType? TypeDocument { get; set; }
+        public string Areas { get; set; }
+        public string TypeDocuments { get; set; }
     }
 }

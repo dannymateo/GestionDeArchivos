@@ -1,4 +1,4 @@
-﻿@model GestionDeArchivos.Data.Entities.Document
+﻿@model GestionDeArchivos.Data.Entities.Usuario
 @{
     ViewData["Title"] = "Documento";
     Layout = null;
@@ -9,50 +9,33 @@
         <form asp-action="AddOrEdit" autocomplete="off" asp-route-id="@Model.Id" onsubmit="return jQueryAjaxPost(this);">
             <div class="box-body">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-                <input type="hidden" asp-for="User" />
-                <input type="hidden" asp-for="Date" />
                 <div>
-                                            @{
-                List<SelectListItem> items0 = (List<SelectListItem>)ViewBag.itemsTypeDocuments;
-            }
-             <div class="form-group">
-                <label asp-for="TypeDocument" class="control-label"></label>
-                <select asp-for="TypeDocument" asp-items="@items0" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                </select>
-                <span asp-validation-for="TypeDocument" class="text-danger"></span>
-            </div>
-                    <label asp-for="Name" class="control-label"></label>
+                    <label asp-for="Nombre" class="control-label"></label>
                     <span class="required">*</span>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
+                    <input asp-for="Nombre" type="text" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
                 </div>
                 <div>
-                    <label asp-for="Remark" class="control-label"></label>
-                    <textarea asp-for="Remark" class="form-control"></textarea>
-                    <span asp-validation-for="Remark" class="text-danger"></span>
+                    <label asp-for="Correo" class="control-label"></label>
+                    <span class="required">*</span>
+                    <input asp-for="Correo" type="email" class="form-control" />
+                    <span asp-validation-for="Correo" class="text-danger"></span>
                 </div>
                 <div>
-                    <label asp-for="DocumentStatus" class="control-label"></label>
+                    <label asp-for="Clave" class="control-label"></label>
                     <span class="required">*</span>
-                    <select name="DocumentStatus"class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                        <option value="Aprobar">Aprobar</option>
-                        <option value="Aprobado">Aprobado</option>
-                        <option value="Revisar">Revisar</option>
+                    <input asp-for="Clave" type="password" class="form-control" />
+                    <span asp-validation-for="Clave" class="text-danger"></span>
+                </div>
+                                <div>
+                    <label asp-for="Roles" class="control-label"></label>
+                    <span class="required">*</span>
+                    <select name="Roles"class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                        <option value="Usuario">Usuario</option>
+                        <option value="Administrador">Administrador</option>
                     </select>
+                    <span asp-validation-for="Roles" class="text-danger"></span>
                 </div>
-                @{
-                    List<SelectListItem> items = (List<SelectListItem>)ViewBag.itemsAreas;
-                }
-                <div>
-                    <label asp-for="Location" class="control-label"></label>
-                    <span class="required">*</span>
-                    <select asp-for="Location" asp-items="@items"class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                    </select>
-                    <span asp-validation-for="Location" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">
                         <i class="fa fa-ban"></i>

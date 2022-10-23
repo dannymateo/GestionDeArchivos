@@ -4,7 +4,7 @@
     <thead style="background-color: #292D5F;color:white;">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TypeDocument)
+                Tipo documento
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -13,14 +13,14 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Área
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                Envia
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserRecibes)
+                Recibe
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Remark)
@@ -38,7 +38,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TypeDocument)
+                    @Html.DisplayFor(modelItem => item.TypeDocument.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -47,11 +47,11 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Location)
+                    @Html.DisplayFor(modelItem => item.Location.Name)
                 </td>
 
                 <td>
-                    @Html.DisplayFor(model => item.User)
+                    @Html.DisplayFor(model => item.User.Correo)
                 </td>
                 <td>
                     @Html.DisplayFor(model => item.UserRecibes)

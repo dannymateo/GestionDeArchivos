@@ -33,13 +33,6 @@ namespace GestionDeArchivos.Controllers
                         View(await _context.Usuarios.Include(x => x.Documents).ToListAsync()) :
                         Problem("Entity set 'DataContext.Usuarios'  is null.");
         }
-        [Authorize(Roles = "Administrador,Usuario")]
-        public async Task<IActionResult> DocumentsUser()
-        {
-            return _context.Documents != null ?
-                        View(await _context.Documents.Where(u => u.User == (User.Identity.Name)).Where(d => d.DocumentStatus == "Revisar").ToListAsync()) :
-                        Problem("Entity set 'DataContext.Usuarios'  is null.");
-        }
 
         [NoDirectAccess]
         public async Task<IActionResult> AddOrEdit(int id = 0)
@@ -131,72 +124,6 @@ namespace GestionDeArchivos.Controllers
                 _flashMessage.Danger("No se puede borrar el usuario porque tiene registros relacionados. ");
             }
             return RedirectToAction(nameof(Index));
-        }
-        [NoDirectAccess]
-        public async Task<IActionResult> EditDocument(int id)
-        {
-            Document document = await _context.Documents.FindAsync(id);
-            if (document == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
-                document.DocumentStatus = "Revisar";
-                document.Date = DateTime.Now;
-                ; return View(document);
-            }
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditDocument(int id, Document document)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    Usuario user = await _context.Usuarios.FirstOrDefaultAsync(u => u.Correo == (User.Identity.Name));
-                    Areas area = await _context.Areas.FirstOrDefaultAsync(a => a.Name == document.Location);
-                    if (area == null || user == null)
-                    {
-                        return NotFound();
-                    }
-                    document.UserRecibes = "";
-                    document.Areas = area;
-                    _context.Update(document);
-                    _flashMessage.Confirmation("Documento eliminado correctamente. ");
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateException dbUpdateException)
-                {
-                    if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    {
-                        _flashMessage.Danger("Ya existe un documento con el mismo nombre. ");
-                    }
-                    else
-                    {
-                        _flashMessage.Danger(dbUpdateException.InnerException.Message);
-                    }
-                    ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
-                    return View(document);
-                }
-                catch (Exception exception)
-                {
-                    _flashMessage.Danger(exception.Message);
-                    return View(document);
-                }
-                ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
-                return Json(new
-                {
-                    isValid = true,
-                    html = ModalHelper.RenderRazorViewToString(this, "DocumentsUser",
-                _context.Areas.ToList())
-                });
-            }
-            ViewBag.items = _getAreasHelper.GetAreasAsync().Result;
-            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "EditDocument", document) });
         }
 
         [NoDirectAccess]

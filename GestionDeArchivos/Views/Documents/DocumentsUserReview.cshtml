@@ -1,17 +1,11 @@
 ﻿@model IEnumerable<GestionDeArchivos.Data.Entities.Document>
 
-@{
-    ViewData["Title"] = "Lista de Documentos";
-}
-<flash dismissable="true" />
-<div class="row-12">
-
-    <div class="card p-3">
-
 <table class="table table-hover" id="example1">
     <thead style="background-color: #292D5F;color:white;">
         <tr>
-
+            <th>
+                Tipo documento
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
             </th>
@@ -19,14 +13,14 @@
                 @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Área
             </th>
 
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.User.Correo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserRecibes)
+                Recibe
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Remark)
@@ -43,7 +37,9 @@
         @foreach (var item in Model)
         {
             <tr>
-
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeDocument.Name)
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
@@ -51,11 +47,11 @@
                     @Html.DisplayFor(modelItem => item.Date)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Location)
+                    @Html.DisplayFor(modelItem => item.Location.Name)
                 </td>
 
                 <td>
-                    @Html.DisplayFor(model => item.User)
+                    @Html.DisplayFor(model => item.User.Correo)
                 </td>
                 <td>
                     @Html.DisplayFor(model => item.UserRecibes)
@@ -72,40 +68,17 @@
                     }
                 </td>
                 <td>
-                    @if (@item.DocumentStatus == "Revisar")
-                    {
-
-                        <button class="btn btn-warning col-12">@Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-exclamation"></i></button>
-
-
-                    }
-                    @if (@item.DocumentStatus == "Aprobado")
-                    {
-
-
-                        <button class="btn btn-success col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-check-double"></i></button>
-
-                    }
-                    @if (@item.DocumentStatus == "Aprobar")
-                    {
-
-                        <button class="btn btn-danger col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-question"></i></button>
-
-                    }
+                    <button class="btn btn-warning col-12">@Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-exclamation"></i></button>
                 </td>
                 <td>
-                    <a onclick="showInPopup('@Url.Action("EditDocument", "Usuarios", new { id=item.Id },
+                    <a onclick="showInPopup('@Url.Action("Edit", "Documents", new { id=item.Id },
 Context.Request.Scheme)' , 'Actualizar documento')" class="btn btn-sm btn-warning"><i class="fa fa-pencil-alt"></i> </a>
                 </td>
             </tr>
-
-
         }
     </tbody>
 
 </table>
-    </div>
-</div>
 
 <!--modal placeholder. Also you can place this modal form in the _Layout.cshtml-->
 <div class="modal fade in" tabindex="-1" role="dialog" data-backdrop="static" id="form-modal">
@@ -153,7 +126,7 @@ Context.Request.Scheme)' , 'Actualizar documento')" class="btn btn-sm btn-warnin
 
 
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-      
+
     });
 </script>
 }

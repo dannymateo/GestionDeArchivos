@@ -38,12 +38,12 @@ namespace GestionDeArchivos.Data
         }
         private async Task CheckDocumentsAsync()
         {
-            if (!_context.Documents.Any())
-            {
-                _context.Documents.Add(new Document { Name = "Documento 1", Location = "Base de Datos", TypeDocument = "1", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
-                _context.Documents.Add(new Document { Name = "Documento 2", Location = "Base de Datos", TypeDocument = "2", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
-                _context.Documents.Add(new Document { Name = "Documento 3", Location = "Base de Datos", TypeDocument = "3", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "User@gmail.com" });
-            }
+            //if (!_context.Documents.Any())
+            //{
+            //    _context.Documents.Add(new Document { Name = "Documento 1", Location = "Base de Datos", TypeDocument = "1", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
+            //    _context.Documents.Add(new Document { Name = "Documento 2", Location = "Base de Datos", TypeDocument = "2", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "Admin@gmail.com" });
+            //    _context.Documents.Add(new Document { Name = "Documento 3", Location = "Base de Datos", TypeDocument = "3", Date = DateTime.Now, DocumentStatus = "Aprobado", User = "User@gmail.com" });
+            //}
             await _context.SaveChangesAsync();
         }
         private async Task CheckUsersAsync()

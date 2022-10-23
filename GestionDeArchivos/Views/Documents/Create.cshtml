@@ -1,4 +1,4 @@
-﻿@model GestionDeArchivos.Data.Entities.Document
+﻿@model GestionDeArchivos.Models.AddDocumentViewModel
 
 @{
     ViewData["Title"] = "Subir Documento";
@@ -11,16 +11,15 @@
     <form asp-action="Create" class="form">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="from-group">
-            <input type="hidden" asp-for="User" />
             <input type="hidden" asp-for="Date" />
                         @{
                 List<SelectListItem> items0 = (List<SelectListItem>)ViewBag.itemsTypeDocuments;
             }
              <div class="form-group">
-                <label asp-for="TypeDocument" class="control-label"></label>
-                <select asp-for="TypeDocument" asp-items="@items0" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <label class="control-label">Tipo de documento</label>
+                <select asp-for="TypeDocuments" asp-items="@items0" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                 </select>
-                <span asp-validation-for="TypeDocument" class="text-danger"></span>
+                <span asp-validation-for="TypeDocuments" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -42,10 +41,10 @@
                 List<SelectListItem> items = (List<SelectListItem>)ViewBag.itemsAreas;
             }
             <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <select asp-for="Location" asp-items="@items" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <label asp-for="Areas" class="control-label"></label>
+                <select asp-for="Areas" asp-items="@items" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                 </select>
-                <span asp-validation-for="Location" class="text-danger"></span>
+                <span asp-validation-for="Areas" class="text-danger"></span>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-save"></i> Guardar</button>
@@ -58,4 +57,4 @@
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    }
+}
