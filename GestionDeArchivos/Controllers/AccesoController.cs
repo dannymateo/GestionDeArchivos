@@ -29,7 +29,7 @@ namespace GestionDeArchivos.Controllers
         public async Task<IActionResult> Index(UsuarioViewModel _usuario)
         {
             _usuario.Correo = _usuario.Correo.ToUpper();
-            var usuario = _helper.ValidarUsuario(_usuario.Correo, _usuario.Clave);
+            var usuario = _helper.ValidarUsuario(_usuario.Correo, _usuario.Contraseña);
 
             if (usuario != null)
             {

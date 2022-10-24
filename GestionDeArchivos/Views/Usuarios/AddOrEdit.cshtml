@@ -1,6 +1,6 @@
-﻿@model GestionDeArchivos.Data.Entities.Usuario
+﻿@model GestionDeArchivos.Models.UsuarioViewModel
 @{
-    ViewData["Title"] = "Documento";
+    ViewData["Title"] = "Usuario";
     Layout = null;
 }
 <flash dismissable="false" />
@@ -22,12 +22,18 @@
                     <span asp-validation-for="Correo" class="text-danger"></span>
                 </div>
                 <div>
-                    <label asp-for="Clave" class="control-label"></label>
+                    <label asp-for="Contraseña" class="control-label"></label>
                     <span class="required">*</span>
-                    <input asp-for="Clave" type="password" class="form-control" />
-                    <span asp-validation-for="Clave" class="text-danger"></span>
+                    <input asp-for="Contraseña" type="password" class="form-control" />
+                    <span asp-validation-for="Contraseña" class="text-danger"></span>
                 </div>
                                 <div>
+                    <label asp-for="ContraseñaConfirm" class="control-label"></label>
+                    <span class="required">*</span>
+                    <input asp-for="ContraseñaConfirm" type="password" class="form-control" />
+                    <span asp-validation-for="ContraseñaConfirm" class="text-danger"></span>
+                </div>
+                 <div>
                     <label asp-for="Roles" class="control-label"></label>
                     <span class="required">*</span>
                     <select name="Roles"class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">

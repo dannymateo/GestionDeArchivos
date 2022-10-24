@@ -16,11 +16,18 @@ namespace GestionDeArchivos.Models
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Correo { get; set; }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "La {0} debe tener al menos {2} caracteres.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Contraseña")]
-        public string Clave { get; set; }
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "El campo {0} debe tener entre {2} y {1} carácteres.")]
+        public string Contraseña { get; set; }
+
+        [Compare("Contraseña", ErrorMessage = "La contraseña y la confirmación no son iguales.")]
+        [Display(Name = "Confirmación de contraseña")]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        [StringLength(20, MinimumLength = 6, ErrorMessage = "El campo {0} debe tener entre {2} y {1} carácteres.")]
+        public string ContraseñaConfirm { get; set; }
 
         [Display(Name = "Rol")]
         [MaxLength(50, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]

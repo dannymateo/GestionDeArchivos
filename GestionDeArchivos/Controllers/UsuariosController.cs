@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using static GestionDeArchivos.Helpers.ModalHelper;
 using GestionDeArchivos.Helpers;
 using Vereyon.Web;
+using GestionDeArchivos.Models;
 
 namespace GestionDeArchivos.Controllers
 {
@@ -39,7 +40,7 @@ namespace GestionDeArchivos.Controllers
         {
             if (id == 0)
             {
-                return View(new Usuario());
+                return View(new UsuarioViewModel());
             }
             else
             {
@@ -48,14 +49,23 @@ namespace GestionDeArchivos.Controllers
                 {
                     return NotFound();
                 }
-                return View(usuario);
+                UsuarioViewModel model = new()
+                {
+                    Id = id,
+                    Contraseña = usuario.Clave,
+                    Correo = usuario.Correo,
+                    Nombre = usuario.Nombre,
+                    Roles = usuario.Roles,
+                    ContraseñaConfirm = usuario.Clave
+                };
+                return View(model);
             }
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(int id, Usuario usuario)
+        public async Task<IActionResult> AddOrEdit(int id, UsuarioViewModel model)
         {
-            if (usuario == null)
+            if (model == null)
             {
                 return NotFound();
             }
@@ -65,6 +75,13 @@ namespace GestionDeArchivos.Controllers
                 {
                     if (id == 0) //Insert
                     {
+                        Usuario usuario = new()
+                        {
+                            Nombre = model.Nombre,
+                            Correo = model.Correo,
+                            Clave = model.Contraseña,
+                            Roles = model.Roles
+                        };
                         _flashMessage.Confirmation("Se inserto correctamente el usuario. ");
                         usuario.Correo = usuario.Correo.ToUpper();
                         _context.Add(usuario);
@@ -72,6 +89,11 @@ namespace GestionDeArchivos.Controllers
                     }
                     else //Update
                     {
+                        Usuario usuario = await _context.Usuarios.FindAsync(id);
+                        usuario.Nombre = model.Nombre;
+                        usuario.Correo = model.Correo;
+                        usuario.Roles = model.Roles;
+                        usuario.Clave = model.Contraseña;
                         _flashMessage.Confirmation("Se actualizo correctamente el usuario. ");
                         usuario.Correo = usuario.Correo.ToUpper();
                         _context.Update(usuario);
@@ -88,12 +110,12 @@ namespace GestionDeArchivos.Controllers
                     {
                         _flashMessage.Danger(dbUpdateException.InnerException.Message);
                     }
-                    return View(usuario);
+                    return View(model);
                 }
                 catch (Exception exception)
                 {
                     _flashMessage.Danger(exception.Message);
-                    return View(usuario);
+                    return View(model);
                 }
                 return Json(new
                 {
@@ -102,7 +124,7 @@ namespace GestionDeArchivos.Controllers
                 _context.Usuarios.ToList())
                 });
             }
-            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", usuario) });
+            return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", model) });
         }
         // GET: Usuarios/Delete/5
         [NoDirectAccess]
