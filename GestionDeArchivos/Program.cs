@@ -20,7 +20,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(option => {
         option.AccessDeniedPath = "/Acceso/NotAuthorized";
         //option.ExpireTimeSpan = TimeSpan.FromMinutes(1);
-        option.AccessDeniedPath = "/Acceso/NotAuthorized";
     });
 builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IUserHelper,UserHelper>();

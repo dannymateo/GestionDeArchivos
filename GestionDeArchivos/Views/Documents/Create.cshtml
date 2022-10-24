@@ -17,8 +17,8 @@
             }
             <div class="form-group">
                 <span class="required">*</span>
-                <label asp-for="TypeDocuments" class="control-label"></label>
-                <select asp-for="TypeDocuments" id="TpD" asp-items="@(List<SelectListItem>)ViewBag.itemsTypeDocuments" class="select2 form-control">
+                <label asp-for="TypeDocuments" class="control-label">Tipo de documento</label>
+                <select asp-for="TypeDocuments" id="TpD" asp-items="@(List<SelectListItem>)ViewBag.itemsTypeDocuments" class="select2 form-control js-example-basic-multiple">
                 </select>
                 <span asp-validation-for="TypeDocuments" class="text-danger"></span>
             </div>
