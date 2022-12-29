@@ -108,11 +108,20 @@ namespace GestionDeArchivos.Controllers
             {
                 return NotFound();
             }
+            bool existeDocumento = _context.Documents
+                         .Any(d => d.Location.Id.CompareTo(areas.Id) == 0);
             try
             {
-                _context.Areas.Remove(areas);
-                await _context.SaveChangesAsync();
-                _flashMessage.Confirmation("Área eliminada correctamente. ");
+                if (existeDocumento)
+                {
+                    _flashMessage.Danger("No se puede borrar el área porque tiene registros relacionados. ");
+                }
+                else
+                {
+                    _context.Areas.Remove(areas);
+                    await _context.SaveChangesAsync();
+                    _flashMessage.Confirmation("Área eliminada correctamente. ");
+                }
             }
             catch
             {

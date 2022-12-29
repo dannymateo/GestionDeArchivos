@@ -25,6 +25,7 @@ builder.Services.AddTransient<SeedDb>();
 builder.Services.AddScoped<IUserHelper,UserHelper>();
 builder.Services.AddScoped<IGetTypeDocuementsHelper, GetTypeDocumentsHelper>();
 builder.Services.AddScoped<IGetAreasHelper,GetAreasHelper>();
+builder.Services.AddScoped<IGetAdvisorHelper, GetAdvisorHelper>();
 var app = builder.Build();
 SeedData();
 

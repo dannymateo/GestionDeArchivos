@@ -25,5 +25,7 @@ namespace GestionDeArchivos.Models
         public string DocumentStatus { get; set; }
         public string Areas { get; set; }
         public string TypeDocuments { get; set; }
+        public int Advisor { get; set; }
+
     }
 }

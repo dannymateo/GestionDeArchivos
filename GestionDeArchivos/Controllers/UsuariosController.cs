@@ -135,11 +135,22 @@ namespace GestionDeArchivos.Controllers
             {
                 return NotFound();
             }
+            bool existeDocumento = _context.Documents
+                         .Any(d => d.User.Id.CompareTo(usuario.Id) == 0);
             try
             {
-                _context.Usuarios.Remove(usuario);
-                await _context.SaveChangesAsync();
-                _flashMessage.Confirmation("Usuario eliminada correctamente. ");
+                if (existeDocumento)
+                {
+                    _flashMessage.Danger("No se puede borrar el usuario porque tiene registros relacionados. ");
+
+                }
+                else
+                {
+                    _context.Usuarios.Remove(usuario);
+                    await _context.SaveChangesAsync();
+                    _flashMessage.Confirmation("Usuario eliminada correctamente. ");
+                }
+
             }
             catch
             {

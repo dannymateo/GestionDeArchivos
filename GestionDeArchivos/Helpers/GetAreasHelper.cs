@@ -14,13 +14,19 @@ namespace GestionDeArchivos.Helpers
         }
         public async Task<IEnumerable<SelectListItem>> GetAreasAsync()
         {
-            List<Areas> list = await _context.Areas.Select(a => new Areas
+            List<Areas> list;
+
+            Areas selectOption = new Areas { Name = "Seleccione una opción" };
+
+            list = await _context.Areas.Select(a => new Areas
             {
                 Id = a.Id,
                 Name = a.Name
             })
                 .OrderBy(a => a.Name)
                 .ToListAsync();
+
+            list.Insert(0, selectOption);
             List<SelectListItem> items = list.ConvertAll(l =>
             {
                 return new SelectListItem()

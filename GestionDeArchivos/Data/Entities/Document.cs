@@ -31,6 +31,7 @@ namespace GestionDeArchivos.Data.Entities
         public string? UserRecibes { get; set; }
         public Usuario? User { get; set; }
         public Areas? Location { get; set; }
+        public Advisor? Advisor { get; set; }
         public DocumentType? TypeDocument { get; set; }
     }
 }

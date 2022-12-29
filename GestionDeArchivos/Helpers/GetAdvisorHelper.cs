@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GestionDeArchivos.Helpers
 {
-    public class GetTypeDocumentsHelper: IGetTypeDocuementsHelper
+    public class GetAdvisorHelper : IGetAdvisorHelper
     {
         private readonly DataContext _context;
-        public GetTypeDocumentsHelper(DataContext context)
+        public GetAdvisorHelper(DataContext context)
         {
             _context = context;
         }
-        public async Task<IEnumerable<SelectListItem>> GetTypeDocuementsAsync()
+        public async Task<IEnumerable<SelectListItem>> GetAdvisorsAsync()
         {
-            List<DocumentType> list;
+            List<Advisor> list;
 
-            DocumentType selectOption = new DocumentType { Name = "Seleccione una opción" };
+            Advisor selectOption = new Advisor { Name = "Seleccione una opción" };
 
-            list = await _context.DocumentTypes.Select(a => new DocumentType
+            list = await _context.Advisors.Select(a => new Advisor
             {
                 Id = a.Id,
                 Name = a.Name

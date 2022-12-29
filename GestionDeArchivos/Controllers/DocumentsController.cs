@@ -16,13 +16,14 @@ namespace GestionDeArchivos.Controllers
         private readonly IFlashMessage _flashMessage;
         private readonly IGetAreasHelper _getAreasHelper;
         private readonly IGetTypeDocuementsHelper _getTypeDocuementsHelper;
-
-        public DocumentsController(DataContext context, IFlashMessage flashMessage, IGetAreasHelper getAreasHelper, IGetTypeDocuementsHelper getTypeDocuementsHelper)
+        private readonly IGetAdvisorHelper _getAdvisorsHelper;
+        public DocumentsController(DataContext context, IFlashMessage flashMessage, IGetAreasHelper getAreasHelper, IGetTypeDocuementsHelper getTypeDocuementsHelper, IGetAdvisorHelper getAdvisorsHelper)
         {
             _flashMessage = flashMessage;
             _context = context;
             _getAreasHelper = getAreasHelper;
             _getTypeDocuementsHelper = getTypeDocuementsHelper;
+            _getAdvisorsHelper = getAdvisorsHelper;
         }
         [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Index()
@@ -54,6 +55,8 @@ namespace GestionDeArchivos.Controllers
         {
             ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
             ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+            ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
+
 
             if (id == 0)
             {
@@ -146,6 +149,8 @@ namespace GestionDeArchivos.Controllers
                     }
                     ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
                     ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+                    ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
+
                     return View(model);
                 }
                 catch (Exception exception)
@@ -162,6 +167,8 @@ namespace GestionDeArchivos.Controllers
             }
             ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
             ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+            ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
+
             return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", model) });
         }
         [NoDirectAccess]
@@ -169,8 +176,9 @@ namespace GestionDeArchivos.Controllers
         {
             ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
             ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+            ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
 
-                Document document = await _context.Documents.Include(d => d.TypeDocument).Include(d => d.Location).Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id);
+            Document document = await _context.Documents.Include(d => d.TypeDocument).Include(d => d.Location).Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id);
                 if (document == null)
                 {
                     return NotFound();
@@ -232,6 +240,8 @@ namespace GestionDeArchivos.Controllers
                     }
                     ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
                     ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+                    ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
+
                     return View(model);
                 }
                 catch (Exception exception)
@@ -248,6 +258,8 @@ namespace GestionDeArchivos.Controllers
             }
             ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
             ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+            ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
+
             return Json(new { isValid = false, html = ModalHelper.RenderRazorViewToString(this, "AddOrEdit", model) });
         }
         [Authorize(Roles = "Administrador,Usuario")]
@@ -256,6 +268,7 @@ namespace GestionDeArchivos.Controllers
         {
             ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
             ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+            ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
             AddDocumentViewModel document = new()
             {
                 DocumentStatus = "Aprobar"
@@ -310,6 +323,8 @@ namespace GestionDeArchivos.Controllers
                 }
             ViewBag.itemsAreas = _getAreasHelper.GetAreasAsync().Result;
             ViewBag.itemsTypeDocuments = _getTypeDocuementsHelper.GetTypeDocuementsAsync().Result;
+            ViewBag.itemsAdvisors = _getAdvisorsHelper.GetAdvisorsAsync().Result;
+
             return View(model);
         }
         [NoDirectAccess]
