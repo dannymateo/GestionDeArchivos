@@ -2,6 +2,6 @@
 {
     public interface IRepositoryDocuments
     {
-        Task<bool> UpdateStatus(int id);
+        Task<bool> UpdateStatus(int id, string userName);
     }
 }

@@ -396,7 +396,7 @@ namespace GestionDeArchivos.Controllers
         [HttpPost]
         public async Task<JsonResult> UpdateStatus(int idDocument)
         {
-            return Json(JsonConvert.SerializeObject(await _repository.UpdateStatus(idDocument)));
+            return Json(JsonConvert.SerializeObject(await _repository.UpdateStatus(idDocument, (User.Identity.Name))));
         }
 
 
