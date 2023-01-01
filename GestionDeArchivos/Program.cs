@@ -3,6 +3,7 @@ using GestionDeArchivos.Data;
 using Microsoft.EntityFrameworkCore;
 using Vereyon.Web;
 using GestionDeArchivos.Helpers;
+using GestionDeArchivos.Services.Documents;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.AddScoped<IUserHelper,UserHelper>();
 builder.Services.AddScoped<IGetTypeDocuementsHelper, GetTypeDocumentsHelper>();
 builder.Services.AddScoped<IGetAreasHelper,GetAreasHelper>();
 builder.Services.AddScoped<IGetAdvisorHelper, GetAdvisorHelper>();
+builder.Services.AddTransient<IRepositoryDocuments, RepositoryDocuments>();
+
 var app = builder.Build();
 SeedData();
 

@@ -15,7 +15,9 @@
             <th>
                 Área
             </th>
-
+            <th>
+                Asesor
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.User.Correo)
             </th>
@@ -49,7 +51,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Location.Name)
                 </td>
-
+                <td>
+                     @if (item.Advisor == null)
+                    {
+                        <p>N/A</p>
+                    }
+                    else
+                    {
+                    @Html.DisplayFor(modelItem => item.Advisor.Name)
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(model => item.User.Correo)
                 </td>

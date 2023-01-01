@@ -16,8 +16,6 @@ namespace GestionDeArchivos.Helpers
         {
             List<DocumentType> list;
 
-            DocumentType selectOption = new DocumentType { Name = "Seleccione una opción" };
-
             list = await _context.DocumentTypes.Select(a => new DocumentType
             {
                 Id = a.Id,
@@ -26,7 +24,6 @@ namespace GestionDeArchivos.Helpers
                 .OrderBy(a => a.Name)
                 .ToListAsync();
 
-            list.Insert(0, selectOption);
             List<SelectListItem> items = list.ConvertAll(l =>
             {
                 return new SelectListItem()
@@ -36,6 +33,7 @@ namespace GestionDeArchivos.Helpers
                     Selected = false
                 };
             });
+            items.Insert(0, new SelectListItem { Text = "Seleccione una opción", Value = "" });
             return items;
         }
     }

@@ -4,6 +4,9 @@
     <thead style="background-color: #292D5F;color:white;">
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.DocumentStatus)
+            </th>
+            <th>
                 Tipo documento
             </th>
             <th>
@@ -15,7 +18,9 @@
             <th>
                 Área
             </th>
-
+            <th>
+                Asesor
+            </th>
             <th>
                 Envia
             </th>
@@ -26,9 +31,6 @@
                 @Html.DisplayNameFor(model => model.Remark)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DocumentStatus)
-            </th>
-            <th>
                 Acciones
             </th>
         </tr>
@@ -37,8 +39,32 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td id="cell-@item.Id">
+                    @if (@item.DocumentStatus == "Revisar")
+                    {
+
+                        <button onclick="updateStatus('@item.Id')" class="btn btn-warning col-12">@Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-exclamation"></i></button>
+                     
+
+                    }
+                    @if (@item.DocumentStatus == "Aprobado")
+                    {
+
+
+                        <button onclick="updateStatus('@item.Id')"  class="btn btn-success col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-check-double"></i></button>
+
+                    }
+                    @if (@item.DocumentStatus == "Aprobar")
+                    {
+
+                        <button onclick="updateStatus('@item.Id')" class="btn btn-danger col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-question"></i></button>
+
+                    }
+
+                </td>
+                
                 <td>
-                    @Html.DisplayFor(modelItem => item.TypeDocument.Name)
+                     @Html.DisplayFor(modelItem => item.TypeDocument.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Name)
@@ -49,7 +75,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.Location.Name)
                 </td>
-
+                 <td>
+                     @if (item.Advisor == null)
+                    {
+                        <p>N/A</p>
+                    }
+                    else
+                    {
+                    @Html.DisplayFor(modelItem => item.Advisor.Name)
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(model => item.User.Correo)
                 </td>
@@ -68,33 +103,34 @@
                     }
                 </td>
                 <td>
-                    @if (@item.DocumentStatus == "Revisar")
-                    {
-
-                        <button class="btn btn-warning col-12">@Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-exclamation"></i></button>
-
-
-                    }
-                    @if (@item.DocumentStatus == "Aprobado")
-                    {
-
-
-                        <button class="btn btn-success col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-check-double"></i></button>
-
-                    }
-                    @if (@item.DocumentStatus == "Aprobar")
-                    {
-
-                        <button class="btn btn-danger col-12"> @Html.DisplayFor(modelItem => item.DocumentStatus) <i class="fas fa-question"></i></button>
-
-                    }
-                </td>
-                <td>
                     <a onclick="showInPopup('@Url.Action("AddOrEdit", "Documents", new { id=item.Id },
 Context.Request.Scheme)' , 'Actualizar documento')" class="btn btn-sm btn-warning"><i class="fa fa-pencil-alt"></i> </a>
+                    <button data-id="@item.Id" class="btn btn-sm btn-danger deleteItem" data-toggle="modal"
+                        data-target="#deleteDialog">
+                        <i class="fa fa-trash"></i>
+                    </button>
                 </td>
             </tr>
         }
     </tbody>
 
 </table>
+<script>
+
+    function updateStatus(id){
+        $.ajax({
+          url: '@Url.Action("UpdateStatus")',
+          type: 'POST',
+          data: { idDocument: id },
+          success: function(response) {
+              if(JSON.parse(response)){
+                  let html = `<button onclick="updateStatus('${id}')" class="btn btn-success col-12"> Aprobado <i class="fas fa-check-double"></i></button>`;
+                  $(`#cell-${id}`).html(html);
+                    alert('Documento aprobado');
+              }else{
+                alert('Ocurrio un error, vuelve a intentarlo');
+              }
+          }
+        });
+    }
+</script>

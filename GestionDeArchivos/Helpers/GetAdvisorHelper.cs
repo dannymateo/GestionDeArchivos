@@ -16,8 +16,6 @@ namespace GestionDeArchivos.Helpers
         {
             List<Advisor> list;
 
-            Advisor selectOption = new Advisor { Name = "Seleccione una opción" };
-
             list = await _context.Advisors.Select(a => new Advisor
             {
                 Id = a.Id,
@@ -26,7 +24,6 @@ namespace GestionDeArchivos.Helpers
                 .OrderBy(a => a.Name)
                 .ToListAsync();
 
-            list.Insert(0, selectOption);
             List<SelectListItem> items = list.ConvertAll(l =>
             {
                 return new SelectListItem()
@@ -36,6 +33,8 @@ namespace GestionDeArchivos.Helpers
                     Selected = false
                 };
             });
+            items.Insert(0, new SelectListItem { Text = "Seleccione una opción", Value = "" });
+
             return items;
         }
     }

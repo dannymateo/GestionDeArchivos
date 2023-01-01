@@ -23,9 +23,13 @@ namespace GestionDeArchivos.Models
         [Display(Name = "Estado")]
         [MaxLength(100, ErrorMessage = "El campo {0} debe tener máximo {1} caractéres.")]
         public string DocumentStatus { get; set; }
+        [Display(Name = "Area")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string Areas { get; set; }
+        [Display(Name = "Tipo de documento")]
+        [Required(ErrorMessage = "La lista {0} es obligatoria.")]
         public string TypeDocuments { get; set; }
-        public int Advisor { get; set; }
+        public string? Advisor { get; set; }
 
     }
 }
