@@ -42,7 +42,7 @@ namespace GestionDeArchivos.Controllers
         public async Task<IActionResult> ListDocuments()
         {
             return _context.Documents != null ?
-                        View(await _context.Documents.Include(d => d.Advisor).Include(d => d.TypeDocument).Include(d => d.Location).Include(d => d.User).Where(d => d.User.Correo == User.Identity.Name).ToListAsync()) :
+                        View(await _context.Documents.Include(d => d.Advisor).Include(d => d.TypeDocument).Include(d => d.Location).Include(d => d.User).OrderBy(dt => dt.Date).Where(d => d.User.Correo == User.Identity.Name).ToListAsync()) :
                         Problem("Entity set 'DataContext.Documents'  is null.");
         }
         [Authorize(Roles = "Administrador,Usuario")]
@@ -117,7 +117,7 @@ namespace GestionDeArchivos.Controllers
                             DocumentStatus = model.DocumentStatus,
                             User = user,
                             Location = area,
-                            Date = DateTime.Today,
+                            Date = DateTime.Now,
                             Name = model.Name,
                             Remark = model.Remark,
                             TypeDocument = documentType,
@@ -325,7 +325,7 @@ namespace GestionDeArchivos.Controllers
                         DocumentStatus = model.DocumentStatus,
                         User = user,
                         Location = area,
-                        Date = DateTime.Today,
+                        Date = DateTime.Now,
                         Name = model.Name,
                         Remark = model.Remark,
                         TypeDocument = documentType,
@@ -390,25 +390,11 @@ namespace GestionDeArchivos.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-
-
-
         [HttpPost]
         public async Task<JsonResult> UpdateStatus(int idDocument)
         {
             return Json(JsonConvert.SerializeObject(await _repository.UpdateStatus(idDocument, (User.Identity.Name))));
         }
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

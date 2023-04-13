@@ -8,7 +8,7 @@
 
 
 <div class="card p-2">
-    <form asp-action="Create" class="form">
+    <form asp-action="Create" class="form" id="add-document-form">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="from-group">
             <input type="hidden" asp-for="Date" />
@@ -24,12 +24,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" id="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Remark" class="control-label"></label>
-                <textarea asp-for="Remark" class="form-control"></textarea>
+                <textarea asp-for="Remark" id="Remark" class="form-control"></textarea>
                 <span asp-validation-for="Remark" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -43,7 +43,7 @@
             }
             <div class="form-group">
                 <label asp-for="Areas" class="control-label"></label>
-                <select required asp-for="Areas" asp-items="@items" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select required asp-for="Areas" id="Areas" asp-items="@items" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                 </select>
                 <span asp-validation-for="Areas" class="text-danger"></span>
             </div>
@@ -52,7 +52,7 @@
             }
             <div class="form-group">
                 <label class="control-label">Asesor(Opcional)</label>
-                <select asp-for="Advisor" asp-items="@itemsAdvisor" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                <select asp-for="Advisor" id="Advisor" asp-items="@itemsAdvisor" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
                 </select>
                 <span asp-validation-for="Advisor" class="text-danger"></span>
             </div>
@@ -67,7 +67,29 @@
     @{
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function () {
+            $(document).ready(function () {
+                $('#add-document-form').submit(function (e) {
+                    e.preventDefault();
+                    var formData = $(this).serialize();
+                    $.ajax({
+                        url: $(this).attr('action'),
+                        type: 'POST',
+                        data: formData,
+                        success: function (result) {
 
+                            alert('Formulario enviado correctamente');
+                            $('#DocumentStatus, #Remark, #Name').val('');
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error al enviar el formulario');
+                        }
+                    });
+                });
+            });
+        })
+    </script>
 <script>
     $(document).ready(function() {
         $('#TpD').select2({
